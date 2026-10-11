@@ -1,0 +1,52 @@
+project:
+  type: website
+  output-dir: docs
+  render:
+    - index.qmd
+    - notebooks/lecture_00.qmd
+    - notebooks/lecture_01.py
+    - notebooks/exercise_01.py
+  resources:
+    - videos/*.mp4
+    - notebooks/*.py
+    - requirements.txt
+    - .nojekyll
+
+website:
+  title: Computational Fluid Dynamics
+  navbar:
+    left:
+      - href: index.qmd
+        text: Course overview
+  sidebar:
+    style: docked
+    search: true
+    contents:
+      - href: index.qmd
+        text: Overview
+      - section: Lectures and exercises
+        contents:
+          - notebooks/lecture_00.qmd
+          - section: Introduction to CFD
+            contents:
+              - notebooks/lecture_01.py
+              - notebooks/exercise_01.py
+
+format:
+  html:
+    theme:
+      dark: [darkly, theme-dark.scss]
+      light: cosmo
+    respect-user-color-scheme: false
+    toc: true
+    code-copy: true
+    code-overflow: scroll
+    css: quarto.css
+
+execute:
+  freeze: auto
+  warning: false
+  error: false
+  daemon: false
+
+lang: en

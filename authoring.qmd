@@ -1,0 +1,73 @@
+---
+title: Working with the course sources
+---
+
+## Python notebook sources
+
+Lecture and exercise chapters are Python scripts in `notebooks/` using Jupytext's percent format. This keeps the material reviewable in Git while retaining runnable notebook cells in editors such as VS Code and Spyder.
+
+```python
+# %% [markdown]
+# ---
+# title: Example chapter
+# jupyter: python3
+# ---
+#
+# ## Explanation
+# Markdown, equations, and prose go here.
+
+# %%
+import matplotlib.pyplot as plt
+
+plt.plot([0, 1, 2], [0, 1, 4])
+plt.show()
+```
+
+## Install and render
+
+Install [Quarto](https://quarto.org/docs/get-started/) and the lightweight rendering dependencies:
+
+```bash
+python -m venv .venv-quarto
+. .venv-quarto/bin/activate
+python -m pip install -r requirements-quarto.txt
+```
+
+Render or preview the complete site from the repository root:
+
+```bash
+quarto render
+quarto preview --port 8002
+```
+
+The generated site is written to `docs/`. To refresh the saved results for one edited chapter, render it explicitly before rebuilding the whole site:
+
+```bash
+quarto render notebooks/lecture_01.py
+quarto render
+```
+
+Set `QUARTO_PYTHON` to the Python executable of the course environment when a chapter needs additional scientific packages.
+
+## Light and dark figures
+
+Lecture 1 demonstrates paired figures using `notebooks/figure_utils.py` and the shared settings in `notebooks/figure_style.py`. Compute data once, then pass a function that creates a fresh figure to `save_theme_variants`. The helper uses Matplotlib's `default` and `dark_background` styles; exports have transparent figure and axes backgrounds by default so they blend into pages and slides. Text and lines retain their light/dark styling, and intentional fills such as the Venn circles are preserved. Pass `transparent=False` for an opaque export; its dark background is `#111111`. Shared presets use 89/180 mm widths, 300 DPI, and LaTeX text by default. Set `use_tex=False` explicitly when calling `figure_style` if intentionally rendering without LaTeX.
+
+Hide a plotting cell's code and incidental output with:
+
+```python
+# %%
+#| echo: false
+#| output: false
+# Generate and save the two figures here.
+```
+
+Include the saved images in the following Markdown cell:
+
+```python
+# %% [markdown]
+# ![Descriptive alternative text](media/example-light.png){.light-content}
+# ![Descriptive alternative text](media/example-dark.png){.dark-content}
+```
+
+Only the image matching the reader's theme is displayed. The plotting code stays in the downloadable Python source. Render the edited chapter explicitly to regenerate its figures before rebuilding the whole site.

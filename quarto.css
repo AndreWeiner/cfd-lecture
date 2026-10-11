@@ -1,0 +1,19 @@
+/* Keep wide scientific content scrollable within the reading column. */
+main.content, main section, .cell, .cell-output { min-width: 0; }
+main table { display: block; max-width: 100%; overflow-x: auto; }
+.cell-output pre { overflow-x: auto; }
+.math.display { display: block; max-width: 100%; overflow-x: auto; }
+main video, main iframe { max-width: 100%; }
+main p, main li { overflow-wrap: anywhere; }
+main img { max-width: 100%; height: auto; }
+.cfd-animation video { display: block; width: 100%; height: auto; background: #111111; border-radius: 12px; overflow: hidden; }
+.cfd-animation figcaption { margin-top: .5rem; font-size: .9em; }
+main :not(pre) > code { white-space: normal; overflow-wrap: anywhere; }
+
+/* Give the physical assumptions more room than their formulas. */
+.assumptions-table table { width: 100%; table-layout: fixed; }
+.assumptions-table th:first-child,
+.assumptions-table td:first-child { width: 65%; }
+.assumptions-table th:last-child,
+.assumptions-table td:last-child { width: 35%; }
+

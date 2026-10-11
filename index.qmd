@@ -1,0 +1,18 @@
+---
+title: Computational Fluid Dynamics
+---
+
+Lecture notes and exercises from the Institute of Fluid Mechanics at TU Dresden.
+
+## Lectures and exercises
+
+| # | Topic | Lecture | Exercise | Slides |
+|--:|:------|:--------|:---------|:-------|
+| 0 | How to learn with generative AI | [Read](notebooks/lecture_00.qmd) | — | — |
+| 1 | Course overview and first example | [Read](notebooks/lecture_01.py) | [Exercises](notebooks/exercise_01.py) | [Slides](https://andreweiner.github.io/cfd-lecture-slides/course_intro.html) |
+| 2 | Transport phenomena and classification | | | |
+| 3 | Finite difference method | | | |
+| 4 | Finite volume method | | | |
+| 5 | Pressure-velocity coupling | | | |
+| 6 | Solving linear systems of equations | | | |
+

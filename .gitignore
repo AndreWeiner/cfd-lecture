@@ -1,0 +1,19 @@
+old_material
+.vscode
+.quarto/
+docs/
+*.quarto_ipynb
+**/*_files/
+__pycache__/
+.ipynb_checkpoints/
+.venv/
+.venv-quarto/
+.tools/
+
+/.quarto/
+**/*.quarto_ipynb
+
+# Student environment and personal exercise work
+/.venv-cfd/
+/exercises/
+/opencode.json

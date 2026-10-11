@@ -1,0 +1,48 @@
+name: Publish course website
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-quarto.txt
+      - uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          version: '1.10.18'
+      - name: Install rendering dependencies
+        run: |
+          python -m pip install -r requirements.txt -r requirements-quarto.txt
+          sudo apt-get update
+          sudo apt-get install -y texlive-latex-base texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra dvipng
+      - uses: actions/configure-pages@v5
+      - name: Render website
+        env:
+          MPLBACKEND: Agg
+        run: |
+          export QUARTO_PYTHON="$(command -v python)"
+          quarto render
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+      - name: Deploy website
+        id: deployment
+        uses: actions/deploy-pages@v4
