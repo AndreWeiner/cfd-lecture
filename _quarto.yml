@@ -29,8 +29,10 @@ website:
           - notebooks/lecture_00.qmd
           - section: Introduction to CFD
             contents:
-              - notebooks/lecture_01.py
-              - notebooks/exercise_01.py
+              - href: notebooks/lecture_01.py
+                text: Lecture
+              - href: notebooks/exercise_01.py
+                text: Practice
 
 format:
   html:
