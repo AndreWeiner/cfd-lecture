@@ -17,3 +17,6 @@ main :not(pre) > code { white-space: normal; overflow-wrap: anywhere; }
 .assumptions-table th:last-child,
 .assumptions-table td:last-child { width: 35%; }
 
+/* Keep the horizontal university wordmark readable in Quarto's navbar. */
+.navbar-logo { max-height: 56px; }
+

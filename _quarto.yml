@@ -11,10 +11,18 @@ project:
     - notebooks/*.py
     - requirements.txt
     - .nojekyll
+    - images/TUD*.svg
 
 website:
   title: Computational Fluid Dynamics
   navbar:
+    logo:
+      light:
+        path: images/TUD_Logo_RGB_horizontal_schwarz_en.svg
+        alt: TU Dresden — Dresden University of Technology
+      dark:
+        path: images/TUD-white.svg
+        alt: TU Dresden — Dresden University of Technology
     left:
       - href: index.qmd
         text: Course overview
