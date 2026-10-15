@@ -17,3 +17,7 @@ __pycache__/
 /.venv-cfd/
 /exercises/
 /opencode.json
+
+# Generated website, build files, and document exports
+/build/
+/output/
