@@ -10,7 +10,7 @@ Lecture notes and exercises from the Institute of Fluid Mechanics at TU Dresden.
 |--:|:------|:--------|:---------|:-------|
 | 0 | How to learn with generative AI | [Read](notebooks/lecture_00.qmd) | — | — |
 | 1 | Course overview and first example | [Read](notebooks/lecture_01.py) | [Exercises](notebooks/exercise_01.py) | [Slides](https://andreweiner.github.io/cfd-lecture-slides/course_intro.html) |
-| 2 | Transport phenomena and classification | [Read](https://andreweiner.github.io/cfd-lecture/notebooks/lecture_02.html) | [Exercises](notebooks/exercise_02.py) | [Slides](https://andreweiner.github.io/cfd-lecture-slides/lecture_02.html) |
+| 2 | Transport phenomena and classification | [Read](https://andreweiner.github.io/cfd-lecture/notebooks/lecture_02.html) | [Exercises](notebooks/exercise_02.py) | [Slides](https://andreweiner.github.io/cfd-lecture-slides/classification.html) |
 | 3 | Finite difference method | | | |
 | 4 | Finite volume method | | | |
 | 5 | Pressure-velocity coupling | | | |
