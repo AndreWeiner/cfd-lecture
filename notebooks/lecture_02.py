@@ -40,8 +40,8 @@
 #
 # ### Hyperbolic behavior — transport and wave propagation
 #
-# <video class="light-content" controls loop playsinline preload="metadata" width="100%" aria-label="Convection in x, time and phi coordinates, with characteristics"><source src="media/pde-convection-light.mp4" type="video/mp4"></video>
-# <video class="dark-content" controls loop playsinline preload="metadata" width="100%" aria-label="Convection in x, time and phi coordinates, with characteristics"><source src="media/pde-convection-dark.mp4" type="video/mp4"></video>
+# <video class="light-content" controls loop playsinline preload="metadata" width="100%" aria-label="Convection in x, time and phi coordinates, with characteristics" autoplay muted><source src="media/pde-convection-light.mp4" type="video/mp4"></video>
+# <video class="dark-content" controls loop playsinline preload="metadata" width="100%" aria-label="Convection in x, time and phi coordinates, with characteristics" autoplay muted><source src="media/pde-convection-dark.mp4" type="video/mp4"></video>
 #
 # The animation shows an initial profile moving at a constant velocity without changing its shape. The three axes represent position $x$, time $t$, and the field $\varphi$. The highlighted curve is the current profile; the faint curves show its history. The dashed lines are **characteristics**: paths along which the value of $\varphi$ remains constant. All plotted quantities are dimensionless.
 #
@@ -81,8 +81,8 @@
 #
 # ### Parabolic behavior — diffusion and smoothing
 #
-# <video class="light-content" controls loop playsinline preload="metadata" width="100%" aria-label="Diffusion in a fixed x and phi plane approaching a uniform state"><source src="media/pde-diffusion-light.mp4" type="video/mp4"></video>
-# <video class="dark-content" controls loop playsinline preload="metadata" width="100%" aria-label="Diffusion in a fixed x and phi plane approaching a uniform state"><source src="media/pde-diffusion-dark.mp4" type="video/mp4"></video>
+# <video class="light-content" controls loop playsinline preload="metadata" width="100%" aria-label="Diffusion in a fixed x and phi plane approaching a uniform state" autoplay muted><source src="media/pde-diffusion-light.mp4" type="video/mp4"></video>
+# <video class="dark-content" controls loop playsinline preload="metadata" width="100%" aria-label="Diffusion in a fixed x and phi plane approaching a uniform state" autoplay muted><source src="media/pde-diffusion-dark.mp4" type="video/mp4"></video>
 #
 # The animation shows $\varphi$ against $x$ in a fixed plane, with the current time displayed in the corner. The dotted curve marks the initial profile. Diffusion smooths spatial differences. Here the initial profile gradually approaches a uniform distribution rather than moving unchanged. The animation uses a finite domain with zero flux at both ends and no sources. These conditions conserve the spatial mean, which determines the uniform equilibrium. All plotted quantities are dimensionless.
 #
@@ -254,8 +254,8 @@
 #
 # The amplitude $\varepsilon$ sets the initial disturbance size, and the wavenumber $k$ determines its wavelength, $2\pi/k$. The second derivative of $\cos(kx)$ is $-k^2\cos(kx)$, so diffusion contributes a decay rate $\alpha k^2$, whereas the reaction contributes a growth rate $\lambda$.
 #
-# <video class="light-content" controls loop playsinline preload="metadata" width="100%" aria-label="Broad and short-wavelength disturbances under diffusion and reaction"><source src="media/pde-reaction-diffusion-light.mp4" type="video/mp4"></video>
-# <video class="dark-content" controls loop playsinline preload="metadata" width="100%" aria-label="Broad and short-wavelength disturbances under diffusion and reaction"><source src="media/pde-reaction-diffusion-dark.mp4" type="video/mp4"></video>
+# <video class="light-content" controls loop playsinline preload="metadata" width="100%" aria-label="Broad and short-wavelength disturbances under diffusion and reaction" autoplay muted><source src="media/pde-reaction-diffusion-light.mp4" type="video/mp4"></video>
+# <video class="dark-content" controls loop playsinline preload="metadata" width="100%" aria-label="Broad and short-wavelength disturbances under diffusion and reaction" autoplay muted><source src="media/pde-reaction-diffusion-dark.mp4" type="video/mp4"></video>
 #
 # The animation compares two disturbances on the dimensionless periodic domain $0\leq x\leq2\pi$, with $\varepsilon=0.5$, $\alpha=0.1$, and $\lambda=0.5$. The solid curves show the full equation. For comparison, the dashed curves show reaction alone, and the dotted curves show diffusion alone. Both panels use the same vertical scale.
 #
@@ -408,7 +408,7 @@
 #
 # The characteristics make the Mach angle $\mu_M$ with the free-stream direction:
 #
-# $$\tan\mu_M=\frac{1}{\sqrt{M_\infty^2-1}},\qquad\sin\mu_M=\frac{1}{M_\infty}.$$
+# $$\tan(\mu_M)=\frac{1}{\sqrt{M_\infty^2-1}},\qquad\sin(\mu_M)=\frac{1}{M_\infty}.$$
 #
 # ![Characteristic wedges upstream and downstream of P, showing the domain of dependence and range of influence for supersonic downstream marching.](media/potential-hyperbolic-light.png){.light-content width=100%}
 # ![Characteristic wedges upstream and downstream of P, showing the domain of dependence and range of influence for supersonic downstream marching.](media/potential-hyperbolic-dark.png){.dark-content width=100%}
@@ -894,8 +894,8 @@
 # $$w_{j,0}(x)=0.1\exp[-(x/0.35)^2],\qquad
 # w_j(x,t)=0.1\exp\left[-\left(\frac{x-\lambda_jt}{0.35}\right)^2\right].$$
 #
-# <video class="light-content" controls loop playsinline preload="metadata" width="100%" aria-label="Three Euler characteristic profiles travelling independently at distinct real speeds"><source src="media/euler-characteristic-modes-light.mp4" type="video/mp4"></video>
-# <video class="dark-content" controls loop playsinline preload="metadata" width="100%" aria-label="Three Euler characteristic profiles travelling independently at distinct real speeds"><source src="media/euler-characteristic-modes-dark.mp4" type="video/mp4"></video>
+# <video class="light-content" controls loop playsinline preload="metadata" width="100%" aria-label="Three Euler characteristic profiles travelling independently at distinct real speeds" autoplay muted><source src="media/euler-characteristic-modes-light.mp4" type="video/mp4"></video>
+# <video class="dark-content" controls loop playsinline preload="metadata" width="100%" aria-label="Three Euler characteristic profiles travelling independently at distinct real speeds" autoplay muted><source src="media/euler-characteristic-modes-dark.mp4" type="video/mp4"></video>
 #
 # Each panel shows one characteristic variable. The faint dotted curve marks its initial profile, and the vertical dashed line tracks its current center. The first acoustic mode travels to the left, the entropy/contact mode moves with the mean flow, and the second acoustic mode travels to the right more quickly. All profiles retain their shapes and amplitudes. The axes use the same scales.
 #
@@ -909,8 +909,8 @@
 #
 # Primes denote departures from the uniform reference state. We additionally choose $\bar\rho=1$, so the reference pressure is $\bar p=\bar\rho\bar c^2/\gamma=1/1.4$. The following animation shows these physical perturbations, normalized by $\bar\rho$, $\bar c$, and $\bar\rho\bar c^2$, respectively:
 #
-# <video class="light-content" controls loop playsinline preload="metadata" width="100%" aria-label="Reconstructed density velocity and pressure perturbations with contributions from the three Euler characteristic modes"><source src="media/euler-physical-perturbations-light.mp4" type="video/mp4"></video>
-# <video class="dark-content" controls loop playsinline preload="metadata" width="100%" aria-label="Reconstructed density velocity and pressure perturbations with contributions from the three Euler characteristic modes"><source src="media/euler-physical-perturbations-dark.mp4" type="video/mp4"></video>
+# <video class="light-content" controls loop playsinline preload="metadata" width="100%" aria-label="Reconstructed density velocity and pressure perturbations with contributions from the three Euler characteristic modes" autoplay muted><source src="media/euler-physical-perturbations-light.mp4" type="video/mp4"></video>
+# <video class="dark-content" controls loop playsinline preload="metadata" width="100%" aria-label="Reconstructed density velocity and pressure perturbations with contributions from the three Euler characteristic modes" autoplay muted><source src="media/euler-physical-perturbations-dark.mp4" type="video/mp4"></video>
 #
 # Solid curves show the total physical perturbations; colored dashed curves show the contributions from the characteristic modes, and faint dotted curves mark the initial physical profiles. Density receives contributions from all three modes. Velocity and pressure receive contributions only from the two acoustic modes: the entropy/contact mode changes density without changing pressure or velocity in this linearized model. The acoustic contributions to velocity have opposite signs, while their pressure contributions have the same sign. The vertical scales differ between panels to make each quantity readable.
 #
@@ -933,8 +933,8 @@
 #
 # **Building the dependence diagram in time.** The following animation links the characteristic variables $w_1$, $w_2$, and $w_3$ to the characteristic paths carrying information toward the fixed event $P=(0.4,1)$. We use the same reference state and speeds as above, but broaden the initial Gaussian profiles to $w_{j,0}(x)=0.1\exp[-(x/1.2)^2]$ so that all three contributions arriving at $P$ are visible.
 #
-# <video class="light-content" controls loop playsinline preload="metadata" width="100%" aria-label="Euler characteristic variables synchronized with the construction of dependence paths leading to a fixed event P"><source src="media/euler-dependence-build-light.mp4" type="video/mp4"></video>
-# <video class="dark-content" controls loop playsinline preload="metadata" width="100%" aria-label="Euler characteristic variables synchronized with the construction of dependence paths leading to a fixed event P"><source src="media/euler-dependence-build-dark.mp4" type="video/mp4"></video>
+# <video class="light-content" controls loop playsinline preload="metadata" width="100%" aria-label="Euler characteristic variables synchronized with the construction of dependence paths leading to a fixed event P" autoplay muted><source src="media/euler-dependence-build-light.mp4" type="video/mp4"></video>
+# <video class="dark-content" controls loop playsinline preload="metadata" width="100%" aria-label="Euler characteristic variables synchronized with the construction of dependence paths leading to a fixed event P" autoplay muted><source src="media/euler-dependence-build-dark.mp4" type="video/mp4"></video>
 #
 # On the left, each panel shows one characteristic variable, with a faint dotted curve marking its initial profile. The moving dot follows the information travelling toward $P$ along the characteristic of the same color on the right. Its height remains constant because each characteristic variable is transported unchanged along its own characteristic. The colored vertical dashed line marks the dot's current position; it does not track the pulse center. The fixed neutral dash-dotted line marks $x_P$, the common destination that all three dots reach at $t=t_P$. The blue shaded interval is the current-time slice between the outer dependence bounds shown on the right; it shrinks to $x_P$. For this constant-coefficient system, each $w_j$ receives information from its own colored dot, rather than from every point in the shaded interval.
 #

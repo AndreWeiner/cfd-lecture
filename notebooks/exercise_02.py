@@ -15,12 +15,12 @@
 #
 # Consider the scalar equation
 #
-# $$\varphi_{xx}+4\varphi_{xy}+\varphi_{yy}+3\varphi_x-2\varphi=\sin x.$$
+# $$\partial_{xx} \varphi+4\partial_{xy} \varphi+\partial_{yy} \varphi+3\partial_x \varphi-2\varphi=\sin(x).$$
 #
-# The subscripts denote partial derivatives with respect to the independent variables $x$ and $y$.
+# The notation $\partial_x\varphi$ denotes the partial derivative with respect to $x$; $\partial_{xx}\varphi$ and $\partial_{xy}\varphi$ denote second partial derivatives.
 #
 # 1. Identify the differential order and determine whether the equation is linear, quasilinear, or fully nonlinear, and whether it is homogeneous.
-# 2. Isolate the principal part and identify $A$, $B$, and $C$ using the lecture's convention $A\varphi_{xx}+2B\varphi_{xy}+C\varphi_{yy}$.
+# 2. Isolate the principal part and identify $A$, $B$, and $C$ using the lecture's convention $A\partial_{xx} \varphi+2B\partial_{xy} \varphi+C\partial_{yy} \varphi$.
 # 3. Calculate the discriminant and classify the PDE.
 # 4. Use the plane-wave ansatz to obtain the characteristic-normal condition. Determine the characteristic-line orientations and distinguish their tangent directions from their normals.
 # 5. Explain whether replacing the right-hand side by another prescribed source, or changing the coefficients of the first derivative and the field itself, would change this classification.
@@ -29,7 +29,7 @@
 #
 # Transonic flow can contain both subsonic and supersonic regions, as illustrated by the airfoil example in Lecture 2. The **Tricomi equation** is a canonical mathematical model used to study such changes of type:
 #
-# $$y\varphi_{xx}+\varphi_{yy}=0.$$
+# $$y\partial_{xx} \varphi+\partial_{yy} \varphi=0.$$
 #
 # Here $\varphi$ is an unknown scalar flow function, and $x$ and $y$ are dimensionless mathematical coordinates. In a transonic-flow derivation, these coordinates and the unknown can result from transformations of the original flow problem; they should not automatically be identified with physical position and the physical velocity potential. This task examines the canonical equation rather than reconstructing a complete airfoil flow.
 #
@@ -50,7 +50,7 @@
 # \frac{\partial v}{\partial t}+v\frac{\partial v}{\partial x}
 # +g\frac{\partial h}{\partial x}=0.$$
 #
-# Here $x$ is the horizontal coordinate, $t$ is time, $h(x,t)$ is the water depth, $v(x,t)$ is the depth-averaged horizontal velocity, and $g>0$ is gravitational acceleration. Write $h=H+\eta$, where $\eta(x,t)$ is the small displacement of the water surface. Linearization about $h=H$, $v=0$ neglects products of perturbations, such as $\eta v$ and $v v_x$.
+# Here $x$ is the horizontal coordinate, $t$ is time, $h(x,t)$ is the water depth, $v(x,t)$ is the depth-averaged horizontal velocity, and $g>0$ is gravitational acceleration. Write $h=H+\eta$, where $\eta(x,t)$ is the small displacement of the water surface. Linearization about $h=H$, $v=0$ neglects products of perturbations, such as $\eta v$ and $v \partial_x v$.
 #
 # The general first-order form used below is
 #
@@ -85,7 +85,7 @@
 # 2. Define the sound speed by $c^2=\mathrm dp/\mathrm d\rho$. Derive the eigenvalues and right eigenvectors of the Jacobian and classify the system for physical states. Explain why only two modes occur, compared with the three modes in the one-dimensional full Euler equations from the lecture.
 # 3. Linearize about a uniform reference state. Examine rightward subsonic, sonic, and supersonic reference velocities. Does a zero characteristic speed imply a repeated eigenvalue or a change of PDE type?
 # 4. For a finite interval with a left inlet and a right outlet, count incoming modes in the subsonic and supersonic cases. Use outward normals $-1$ at the inlet and $+1$ at the outlet. Explain how the count differs from that of the full Euler system.
-# 5. Contrast this result with the steady small-disturbance potential-flow equation $(1-M_\infty^2)\psi_{xx}+\psi_{yy}=0$. Explain why its Mach-dependent classification does not contradict the classification of the time-dependent isentropic Euler system.
+# 5. Contrast this result with the steady small-disturbance potential-flow equation $(1-M_\infty^2)\partial_{xx} \psi+\partial_{yy} \psi=0$. Explain why its Mach-dependent classification does not contradict the classification of the time-dependent isentropic Euler system.
 #
 # ## Part 2 — Code lab
 #
