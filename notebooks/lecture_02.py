@@ -220,17 +220,17 @@
 # =R\left(x,y,\varphi,\frac{\partial\varphi}{\partial x},\frac{\partial\varphi}{\partial y}\right).
 # $$
 #
-# The coefficients $A$, $B$, and $C$ may depend on $x$, $y$, $\varphi$, and its first derivatives, but not on its second derivatives. At least one of them must be nonzero for the equation to be second order at the point considered. The right-hand side $R$ collects sources and lower-order terms. Here we use the convention **$2B$ for the mixed-derivative coefficient**. For a sufficiently smooth field, the two mixed derivatives are equal: $\varphi_{xy}=\varphi_{yx}$.
+# The coefficients $A$, $B$, and $C$ may depend on $x$, $y$, $\varphi$, and its first derivatives, but not on its second derivatives. At least one of them must be nonzero for the equation to be second order at the point considered. The right-hand side $R$ collects sources and lower-order terms. Here we use the convention **$2B$ for the mixed-derivative coefficient**. For a sufficiently smooth field, the two mixed derivatives are equal: $\partial_{xy} \varphi=\partial_{yx} \varphi$.
 #
 # #### Linear, quasilinear, and nonlinear equations
 #
 # - **Linear.** All coefficients depend only on the independent variables, and the field and all its derivatives enter linearly. In the form above, this means $A=A(x,y)$, $B=B(x,y)$, $C=C(x,y)$, and
 #
-#   $$R=f(x,y)-D(x,y)\varphi_x-E(x,y)\varphi_y-F(x,y)\varphi.$$
+#   $$R=f(x,y)-D(x,y)\partial_x \varphi-E(x,y)\partial_y \varphi-F(x,y)\varphi.$$
 #
-#   Here $D$, $E$, and $F$ are prescribed coefficients, and $f$ is a prescribed source. The subscripts denote partial derivatives. A nonzero source makes the equation inhomogeneous, but does not make it nonlinear.
-# - **Quasilinear.** The highest-order derivatives enter linearly, but their coefficients may depend on the field or its first derivatives. The right-hand side can also depend nonlinearly on these lower-order quantities. For example, a coefficient $A=1+\varphi^2$ makes the equation nonlinear overall while retaining a linear dependence on $\varphi_{xx}$.
-# - **Nonlinear.** Any nonlinear dependence on the field or its derivatives makes the equation nonlinear overall. Quasilinear equations therefore form a subclass of nonlinear equations. If the highest-order derivatives themselves enter nonlinearly, as in $(\varphi_{xx})^2+\varphi_{yy}=0$, the equation is called **fully nonlinear** and is not covered by the coefficient form above.
+#   Here $D$, $E$, and $F$ are prescribed coefficients, and $f$ is a prescribed source. The notation $\partial_x\varphi$ denotes the partial derivative of $\varphi$ with respect to $x$. A nonzero source makes the equation inhomogeneous, but does not make it nonlinear.
+# - **Quasilinear.** The highest-order derivatives enter linearly, but their coefficients may depend on the field or its first derivatives. The right-hand side can also depend nonlinearly on these lower-order quantities. For example, a coefficient $A=1+\varphi^2$ makes the equation nonlinear overall while retaining a linear dependence on $\partial_{xx} \varphi$.
+# - **Nonlinear.** Any nonlinear dependence on the field or its derivatives makes the equation nonlinear overall. Quasilinear equations therefore form a subclass of nonlinear equations. If the highest-order derivatives themselves enter nonlinearly, as in $(\partial_{xx} \varphi)^2+\partial_{yy} \varphi=0$, the equation is called **fully nonlinear** and is not covered by the coefficient form above.
 #
 # This distinction matters because it determines which mathematical and numerical techniques can be applied directly. For a linear differential operator, linear combinations of solutions solve the correspondingly combined forcing and initial and boundary data. For a fixed homogeneous problem, this gives the superposition principle. Nonlinear equations generally do not obey this principle; their discretization typically requires updating solution-dependent coefficients or solving a nonlinear system.
 #
@@ -269,7 +269,7 @@
 # For the general second-order equation, we classify its **principal part**, which consists of the highest-order terms. We therefore examine
 #
 # $$
-# \underbrace{A\varphi_{xx}+2B\varphi_{xy}+C\varphi_{yy}}_{\text{principal part}}=0.
+# \underbrace{A\partial_{xx} \varphi+2B\partial_{xy} \varphi+C\partial_{yy} \varphi}_{\text{principal part}}=0.
 # $$
 #
 # One way to understand this is to consider a smooth, invertible change of independent variables. The chain rule transforms the second derivatives into combinations of second derivatives in the new coordinates, together with additional lower-order terms. A term containing only the field or its first derivatives cannot produce a second derivative under this transformation. Thus $A$, $B$, and $C$ determine the structure of the highest-order part in any such coordinate system. This structure also determines the characteristic directions that we will use for classification.
@@ -299,16 +299,16 @@
 #
 # $$
 # \begin{aligned}
-# \varphi_x&=\mathrm{i}n_x\varphi,&\qquad\varphi_y&=\mathrm{i}n_y\varphi,\\
-# \varphi_{xx}&=-n_x^2\varphi,&\varphi_{yy}&=-n_y^2\varphi,\\
-# \varphi_{xy}&=\mathrm{i}n_x\mathrm{i}n_y\varphi=-n_xn_y\varphi.
+# \partial_x \varphi&=\mathrm{i}n_x\varphi,&\qquad\partial_y \varphi&=\mathrm{i}n_y\varphi,\\
+# \partial_{xx} \varphi&=-n_x^2\varphi,&\partial_{yy} \varphi&=-n_y^2\varphi,\\
+# \partial_{xy} \varphi&=\mathrm{i}n_x\mathrm{i}n_y\varphi=-n_xn_y\varphi.
 # \end{aligned}
 # $$
 #
 # We substitute into the homogeneous principal-part equation to obtain
 #
 # $$
-# A\varphi_{xx}+2B\varphi_{xy}+C\varphi_{yy}
+# A\partial_{xx} \varphi+2B\partial_{xy} \varphi+C\partial_{yy} \varphi
 # =-\left(An_x^2+2Bn_xn_y+Cn_y^2\right)\hat\varphi\exp\bigl[\mathrm{i}(n_xx+n_yy)\bigr]=0.
 # $$
 #
@@ -358,9 +358,9 @@
 # We consider steady, two-dimensional, inviscid, irrotational flow past a slender body in a uniform free stream. The body thickness and surface slopes are small, so the velocity disturbances are small compared with the free-stream speed. We write the total velocity potential as
 #
 # $$\Phi(x,y)=U_\infty x+\psi(x,y),\qquad
-# u=U_\infty+\psi_x,\qquad v=\psi_y.$$
+# u=U_\infty+\partial_x \psi,\qquad v=\partial_y \psi.$$
 #
-# Here $x$ is the free-stream direction, $y$ is transverse, $U_\infty$ is the uniform incoming speed, $\Phi$ is the total velocity potential, and $\psi$ is the disturbance potential. The components $u$ and $v$ form the velocity vector $\mathbf{u}$. The small-disturbance assumption requires $|\psi_x|,|\psi_y|\ll U_\infty$.
+# Here $x$ is the free-stream direction, $y$ is transverse, $U_\infty$ is the uniform incoming speed, $\Phi$ is the total velocity potential, and $\psi$ is the disturbance potential. The components $u$ and $v$ form the velocity vector $\mathbf{u}$. The small-disturbance assumption requires $|\partial_x \psi|,|\partial_y \psi|\ll U_\infty$.
 #
 # ![Analytical incompressible potential flow around a slender ellipse, with streamlines and calculated velocity-disturbance vectors.](media/slender-body-light.png){.light-content width=100%}
 # ![Analytical incompressible potential flow around a slender ellipse, with streamlines and calculated velocity-disturbance vectors.](media/slender-body-dark.png){.dark-content width=100%}
@@ -369,12 +369,12 @@
 #
 # Linearizing the compressible potential-flow equation about the uniform free stream gives
 #
-# $$\boxed{(1-M_\infty^2)\psi_{xx}+\psi_{yy}=0},\qquad
+# $$\boxed{(1-M_\infty^2)\partial_{xx} \psi+\partial_{yy} \psi=0},\qquad
 # M_\infty=\frac{U_\infty}{c_\infty},$$
 #
 # where $c_\infty$ is the free-stream sound speed and $M_\infty$ is the free-stream Mach number. The model describes smooth small disturbances; it does not resolve shock structure or viscous layers. Near sonic conditions, the linearization ceases to be a reliable physical approximation because terms discarded during linearization can become important.
 #
-# Comparing with $A\psi_{xx}+2B\psi_{xy}+C\psi_{yy}=0$, we identify
+# Comparing with $A\partial_{xx} \psi+2B\partial_{xy} \psi+C\partial_{yy} \psi=0$, we identify
 #
 # $$A=1-M_\infty^2,\qquad B=0,\qquad C=1.$$
 #
@@ -386,7 +386,7 @@
 #
 # ##### Supersonic case: $M_\infty>1$
 #
-# Here $\Delta>0$, so the equation is hyperbolic. We define $\beta=\sqrt{M_\infty^2-1}>0$. The equation becomes $-\beta^2\psi_{xx}+\psi_{yy}=0$. The wave-vector condition is
+# Here $\Delta>0$, so the equation is hyperbolic. We define $\beta=\sqrt{M_\infty^2-1}>0$. The equation becomes $-\beta^2\partial_{xx} \psi+\partial_{yy} \psi=0$. The wave-vector condition is
 #
 # $$-\beta^2n_x^2+n_y^2=0\quad\Rightarrow\quad n_y=\pm\beta n_x.$$
 #
@@ -404,7 +404,7 @@
 #
 # $$\boxed{\psi(x,y)=F(x+\beta y)+G(x-\beta y)},$$
 #
-# where $F$ and $G$ are arbitrary twice-differentiable functions, determined by the prescribed data. Each contribution is constant along one characteristic family; their sum need not be constant along either family. Substituting the expression gives $\psi_{xx}=F''+G''$ and $\psi_{yy}=\beta^2(F''+G'')$, confirming that it solves the PDE.
+# where $F$ and $G$ are arbitrary twice-differentiable functions, determined by the prescribed data. Each contribution is constant along one characteristic family; their sum need not be constant along either family. Substituting the expression gives $\partial_{xx} \psi=F''+G''$ and $\partial_{yy} \psi=\beta^2(F''+G'')$, confirming that it solves the PDE.
 #
 # The characteristics make the Mach angle $\mu_M$ with the free-stream direction:
 #
@@ -434,16 +434,16 @@
 #
 # The sketch shows the **limiting characteristic geometry**, not an evolution problem obtained by substituting $M_\infty=1$. In the supersonic limit, a point at any fixed transverse distance and strictly upstream or downstream of $P$ eventually lies inside the corresponding wedge. The body is excluded from the fluid domain, and boundary interactions are not shown.
 #
-# At exactly $M_\infty=1$, the discriminant vanishes and the principal part is algebraically parabolic. However, the linearized equation degenerates to $\psi_{yy}=0$, with solutions $\psi=a(x)y+b(x)$; it does not itself determine downstream evolution. Moreover, the linear small-disturbance approximation is not reliable near sonic conditions, where discarded nonlinear terms can become important. The limiting sketch therefore illustrates the classification geometry rather than a quantitative prediction of sonic flow.
+# At exactly $M_\infty=1$, the discriminant vanishes and the principal part is algebraically parabolic. However, the linearized equation degenerates to $\partial_{yy} \psi=0$, with solutions $\psi=a(x)y+b(x)$; it does not itself determine downstream evolution. Moreover, the linear small-disturbance approximation is not reliable near sonic conditions, where discarded nonlinear terms can become important. The limiting sketch therefore illustrates the classification geometry rather than a quantitative prediction of sonic flow.
 #
 # ##### Subsonic case: $M_\infty<1$
 #
 # Here $\Delta<0$, so the equation is elliptic. We set $\eta=\sqrt{1-M_\infty^2}>0$. Then
 #
-# $$\eta^2\psi_{xx}+\psi_{yy}=0,\qquad
+# $$\eta^2\partial_{xx} \psi+\partial_{yy} \psi=0,\qquad
 # \tau_\pm=\pm\frac{\mathrm{i}}{\eta}.$$
 #
-# There are no real characteristic directions. Using the scaled coordinate $X=x/\eta$ transforms the equation into $\psi_{XX}+\psi_{yy}=0$, the Laplace equation.
+# There are no real characteristic directions. Using the scaled coordinate $X=x/\eta$ transforms the equation into $\partial_{XX} \psi+\partial_{yy} \psi=0$, the Laplace equation.
 #
 # ![Global coupling of an elliptic boundary-value problem, with P connected to the surrounding boundary and no characteristic wedge.](media/potential-elliptic-light.png){.light-content width=100%}
 # ![Global coupling of an elliptic boundary-value problem, with P connected to the surrounding boundary and no characteristic wedge.](media/potential-elliptic-dark.png){.dark-content width=100%}
@@ -459,30 +459,30 @@
 #
 # We consider again
 #
-# $$A\varphi_{xx}+2B\varphi_{xy}+C\varphi_{yy}
-# =R(x,y,\varphi,\varphi_x,\varphi_y).$$
+# $$A\partial_{xx} \varphi+2B\partial_{xy} \varphi+C\partial_{yy} \varphi
+# =R(x,y,\varphi,\partial_x \varphi,\partial_y \varphi).$$
 #
 # We define two new fields
 #
-# $$p=\varphi_x,\qquad q=\varphi_y.$$
+# $$p=\partial_x \varphi,\qquad q=\partial_y \varphi.$$
 #
 # Here $p$ and $q$ are auxiliary derivative fields, not pressure or mass flux.
 #
 # The second derivatives of $\varphi$ now become first derivatives of $p$ and $q$:
 #
-# $$\varphi_{xx}=p_x,\qquad\varphi_{xy}=p_y=q_x,\qquad\varphi_{yy}=q_y.$$
+# $$\partial_{xx} \varphi=\partial_x p,\qquad\partial_{xy} \varphi=\partial_y p=\partial_x q,\qquad\partial_{yy} \varphi=\partial_y q.$$
 #
 # The original equation can therefore be replaced by the first-order system
 #
 # $$
 # \begin{aligned}
-# A p_x+2B p_y+C q_y&=R(x,y,\varphi,p,q),\\
-# p_y-q_x&=0,\\
-# \varphi_x&=p,\qquad\varphi_y=q.
+# A \partial_x p+2B \partial_y p+C \partial_y q&=R(x,y,\varphi,p,q),\\
+# \partial_y p-\partial_x q&=0,\\
+# \partial_x \varphi&=p,\qquad\partial_y \varphi=q.
 # \end{aligned}
 # $$
 #
-# The **compatibility condition** $p_y=q_x$ follows from equality of the mixed derivatives. It ensures locally that the two fields can be derivatives of the same scalar potential. The last two relations retain the definition of that potential and are needed when the right-hand side or the coefficients depend on $\varphi$ itself.
+# The **compatibility condition** $\partial_y p=\partial_x q$ follows from equality of the mixed derivatives. It ensures locally that the two fields can be derivatives of the same scalar potential. The last two relations retain the definition of that potential and are needed when the right-hand side or the coefficients depend on $\varphi$ itself.
 #
 # If the equation depends only on derivatives of $\varphi$, the first two equations form a closed system for $p$ and $q$. We can then reconstruct $\varphi$ by integration, with an appropriate reference value. The boundary or initial conditions must also be translated consistently; the new derivative fields cannot be prescribed independently of the original field.
 #
@@ -497,13 +497,13 @@
 # \qquad\mathbf{r}=\begin{pmatrix}p\\q\end{pmatrix}.
 # $$
 #
-# Equivalently, $\mathbf{M}_x\mathbf{r}_x+\mathbf{M}_y\mathbf{r}_y=\mathbf{s}$. The vector $\mathbf{r}$ contains the two derivative fields, $\mathbf{M}_x$ and $\mathbf{M}_y$ are $2\times2$ coefficient matrices, and $\mathbf{s}$ is the right-hand-side vector. Their entries retain any dependence on position or the unknown fields. If the coefficients or $R$ depend on $\varphi$ itself, the derivative definitions must also be retained to complete the system.
+# Equivalently, $\mathbf{M}_x\partial_x \mathbf{r}+\mathbf{M}_y\partial_y \mathbf{r}=\mathbf{s}$. The vector $\mathbf{r}$ contains the two derivative fields, $\mathbf{M}_x$ and $\mathbf{M}_y$ are $2\times2$ coefficient matrices, and $\mathbf{s}$ is the right-hand-side vector. Their entries retain any dependence on position or the unknown fields. If the coefficients or $R$ depend on $\varphi$ itself, the derivative definitions must also be retained to complete the system.
 #
 # #### Classification from the determinant of a first-order system
 #
 # We again examine the homogeneous principal part, using constant coefficients or coefficients frozen locally:
 #
-# $$\mathbf{M}_x\mathbf{r}_x+\mathbf{M}_y\mathbf{r}_y=\mathbf{0}.$$
+# $$\mathbf{M}_x\partial_x \mathbf{r}+\mathbf{M}_y\partial_y \mathbf{r}=\mathbf{0}.$$
 #
 # As in the classification of second-order PDEs, we now use a plane-wave ansatz, this time with a vector-valued amplitude:
 #
@@ -512,8 +512,8 @@
 #
 # The amplitude is now a vector because the system has two unknown fields. Differentiation gives
 #
-# $$\mathbf{r}_x=\mathrm{i}n_x\hat{\mathbf{r}}e^{\mathrm{i}(n_xx+n_yy)},\qquad
-# \mathbf{r}_y=\mathrm{i}n_y\hat{\mathbf{r}}e^{\mathrm{i}(n_xx+n_yy)}.$$
+# $$\partial_x \mathbf{r}=\mathrm{i}n_x\hat{\mathbf{r}}e^{\mathrm{i}(n_xx+n_yy)},\qquad
+# \partial_y \mathbf{r}=\mathrm{i}n_y\hat{\mathbf{r}}e^{\mathrm{i}(n_xx+n_yy)}.$$
 #
 # We substitute and divide out the nonzero factor $\mathrm{i}e^{\mathrm{i}(n_xx+n_yy)}$ to obtain a homogeneous linear algebraic system for the amplitude:
 #
@@ -583,9 +583,9 @@
 #
 # Thus the conservation equations take the first-order quasilinear form
 #
-# $$\boxed{\mathbf{q}_t+\mathbf{J}(\mathbf{q})\mathbf{q}_x=\mathbf{s}.}$$
+# $$\boxed{\partial_t \mathbf{q}+\mathbf{J}(\mathbf{q})\partial_x \mathbf{q}=\mathbf{s}.}$$
 #
-# The $m\times m$ matrix $\mathbf{J}$ is the **flux Jacobian**. Comparing with the general first-order system, the coefficient of $\mathbf{q}_t$ is the identity matrix, while the coefficient of $\mathbf{q}_x$ is the flux Jacobian. If the flux is linear in the state, the Jacobian is constant and the system is linear. Otherwise, its coefficients depend on the solution, and classification is performed locally by evaluating the Jacobian at a reference state.
+# The $m\times m$ matrix $\mathbf{J}$ is the **flux Jacobian**. Comparing with the general first-order system, the coefficient of $\partial_t \mathbf{q}$ is the identity matrix, while the coefficient of $\partial_x \mathbf{q}$ is the flux Jacobian. If the flux is linear in the state, the Jacobian is constant and the system is linear. Otherwise, its coefficients depend on the solution, and classification is performed locally by evaluating the Jacobian at a reference state.
 #
 # This conversion uses differentiability. At a discontinuity, such as a shock, the expanded quasilinear form cannot replace the conservative formulation; the integral conservation laws supply the required jump conditions. In the following classification, we examine smooth states or a local linearization about such a state.
 #
@@ -640,7 +640,7 @@
 #
 # Both vectors have three components. The entries of $\mathbf{q}$ are mass, momentum, and total energy per unit volume; the entries of $\mathbf{f}$ are the corresponding fluxes. Their conservation equations become
 #
-# $$\mathbf{q}_t+\partial_x\mathbf{f}(\mathbf{q})=\mathbf{0}.$$
+# $$\partial_t \mathbf{q}+\partial_x\mathbf{f}(\mathbf{q})=\mathbf{0}.$$
 #
 # **Deriving the flux Jacobian.** To differentiate with respect to the conserved variables, we write everything in terms of the independent components $q_1$, $q_2$, and $q_3$:
 #
@@ -734,7 +734,7 @@
 # +\mathbf{J}(\mathbf{q})\frac{\partial}{\partial x}\begin{pmatrix}\rho\\\rho u\\\rho E\end{pmatrix}
 # =\begin{pmatrix}0\\0\\0\end{pmatrix},
 # \qquad\text{or}\qquad
-# \mathbf{q}_t+\mathbf{J}(\mathbf{q})\mathbf{q}_x=\mathbf{0}.
+# \partial_t \mathbf{q}+\mathbf{J}(\mathbf{q})\partial_x \mathbf{q}=\mathbf{0}.
 # $$
 #
 # The flux Jacobian is a $3\times3$ matrix and depends on the local flow state through $u$ and $H$. The Euler equations are therefore nonlinear conservation laws, whose expanded form is quasilinear. Unlike two independent transport equations, mass, momentum, and energy are coupled through the fluxes and the equation of state.
@@ -744,16 +744,64 @@
 #
 # The quasilinear conservation equations
 #
-# $$\mathbf{q}_t+\mathbf{J}(\mathbf{q})\mathbf{q}_x=\mathbf{0}$$
+# $$\partial_t \mathbf{q}+\mathbf{J}(\mathbf{q})\partial_x \mathbf{q}=\mathbf{0}$$
 #
-# look almost like the scalar convection equation $\varphi_t+u\varphi_x=0$. The difference is that $\mathbf{q}$ is a vector and the flux Jacobian $\mathbf{J}$ is a matrix rather than a scalar transport velocity. Its off-diagonal entries couple the different conserved quantities.
+# look almost like the scalar convection equation $\partial_t \varphi+u\partial_x \varphi=0$. The difference is that $\mathbf{q}$ is a vector and the flux Jacobian $\mathbf{J}$ is a matrix rather than a scalar transport velocity. Its off-diagonal entries couple the different conserved quantities.
 #
-# To classify the system locally, we linearize about a uniform reference state $\overline{\mathbf{q}}$. Writing $\mathbf{q}=\overline{\mathbf{q}}+\varepsilon\mathbf{v}$ and retaining terms linear in the perturbation gives
+# To classify the system locally, we linearize about a uniform reference state $\overline{\mathbf{q}}$. The resulting constant-coefficient system is
 #
-# $$\mathbf{v}_t+\mathbf{J}_0\mathbf{v}_x=\mathbf{0},\qquad
+# $$\partial_t\mathbf{v}+\mathbf{J}_0\partial_x\mathbf{v}=\mathbf{0},\qquad
 # \mathbf{J}_0=\mathbf{J}(\overline{\mathbf{q}}).$$
 #
-# The perturbation vector $\mathbf{v}$ contains the small changes in the conserved quantities; it is not the velocity vector. The reference Jacobian $\mathbf{J}_0$ is constant in this local model.
+# Here $\mathbf{v}$ describes perturbations of the conserved quantities, not the velocity vector. The detailed derivation is optional and can be expanded below.
+#
+# ::: {.callout-note collapse="true" title="Additional reading: linearization about a uniform reference state"}
+#
+# To classify the system locally, we first study small perturbations about a uniform reference state $\overline{\mathbf{q}}$. We write
+#
+# $$\mathbf{q}(x,t)=\overline{\mathbf{q}}+\varepsilon\mathbf{v}(x,t),\qquad 0<\varepsilon\ll1.$$
+#
+# Here $\varepsilon$ is a dimensionless parameter measuring the perturbation amplitude. The vector $\mathbf{v}$ describes changes in the conserved quantities and has the same units as $\mathbf{q}$; it is not the velocity vector. The actual perturbation is $\varepsilon\mathbf{v}$. We assume that the perturbation and its derivatives remain bounded as $\varepsilon\to0$.
+#
+# **1. We differentiate the perturbed state.** Because the reference state is constant in space and time, its derivatives vanish:
+#
+# $$\partial_t\mathbf{q}=\varepsilon\partial_t\mathbf{v},\qquad
+# \partial_x\mathbf{q}=\varepsilon\partial_x\mathbf{v}.$$
+#
+# **2. We expand the flux Jacobian about the reference state.** For a sufficiently smooth flux, a Taylor expansion gives
+#
+# $$\mathbf{J}(\overline{\mathbf{q}}+\varepsilon\mathbf{v})
+# =\mathbf{J}_0+\varepsilon\mathbf{J}_1[\mathbf{v}]+O(\varepsilon^2),\qquad
+# \mathbf{J}_0=\mathbf{J}(\overline{\mathbf{q}}).$$
+#
+# The matrix $\mathbf{J}_1[\mathbf{v}]$ is the first-order change in the Jacobian caused by the perturbation. Component by component, it is
+#
+# $$\bigl(\mathbf{J}_1[\mathbf{v}]\bigr)_{ij}
+# =\sum_{k=1}^{m}\left.\frac{\partial J_{ij}}{\partial q_k}\right|_{\overline{\mathbf{q}}}v_k,$$
+#
+# where $m$ is the number of conserved variables. Thus the Jacobian still changes with the state; we have not assumed this dependence away.
+#
+# **3. We substitute both expansions into the quasilinear equation.** We obtain
+#
+# $$\varepsilon\partial_t\mathbf{v}
+# +\left(\mathbf{J}_0+\varepsilon\mathbf{J}_1[\mathbf{v}]+O(\varepsilon^2)\right)
+# \varepsilon\partial_x\mathbf{v}=\mathbf{0},$$
+#
+# or, after multiplying out,
+#
+# $$\varepsilon\left(\partial_t\mathbf{v}+\mathbf{J}_0\partial_x\mathbf{v}\right)
+# +\varepsilon^2\mathbf{J}_1[\mathbf{v}]\partial_x\mathbf{v}
+# +O(\varepsilon^3)=\mathbf{0}.$$
+#
+# The change in the Jacobian is multiplied by the perturbation gradient, so its contribution is **second order in the perturbation amplitude**. We divide by $\varepsilon$ and retain only the leading terms as $\varepsilon\to0$:
+#
+# $$\boxed{\partial_t\mathbf{v}+\mathbf{J}_0\partial_x\mathbf{v}=\mathbf{0}.}$$
+#
+# This equation is linear because $\mathbf{J}_0$ is evaluated at the prescribed reference state and does not depend on $\mathbf{v}$. It has constant coefficients because that reference state is uniform. For the Euler equations, this means evaluating the Jacobian using the reference density, velocity, and pressure. The resulting system describes the leading-order evolution of small disturbances; it does not retain their nonlinear interaction.
+#
+# Uniformity matters: linearization about a spatially varying reference solution also produces terms involving its gradients. The constant-coefficient system used here is therefore an exact linearization about a uniform state, or a local frozen-coefficient model when we examine a nonuniform flow at a particular state.
+#
+# :::
 #
 # **What if the matrix were diagonal?** Then each component would satisfy its own convection equation, without coupling to the other components. We would have independent profiles travelling at their individual transport speeds. This motivates diagonalizing the Jacobian to identify variables in which the system decouples.
 #
@@ -775,11 +823,11 @@
 #
 # We substitute the eigendecomposition into the linearized PDE system:
 #
-# $$\mathbf{v}_t+\mathbf{R}\boldsymbol{\Lambda}\mathbf{R}^{-1}\mathbf{v}_x=\mathbf{0}.$$
+# $$\partial_t \mathbf{v}+\mathbf{R}\boldsymbol{\Lambda}\mathbf{R}^{-1}\partial_x \mathbf{v}=\mathbf{0}.$$
 #
 # Next, we multiply the entire equation from the left by $\mathbf{R}^{-1}$. Using $\mathbf{R}^{-1}\mathbf{R}=\mathbf{I}$ gives
 #
-# $$\mathbf{R}^{-1}\mathbf{v}_t+\boldsymbol{\Lambda}\mathbf{R}^{-1}\mathbf{v}_x=\mathbf{0}.$$
+# $$\mathbf{R}^{-1}\partial_t \mathbf{v}+\boldsymbol{\Lambda}\mathbf{R}^{-1}\partial_x \mathbf{v}=\mathbf{0}.$$
 #
 # Because the eigenvector matrix is constant in this frozen linear model, we can move its inverse inside the derivatives:
 #
@@ -792,14 +840,14 @@
 #
 # Each entry of $\mathbf{w}$ is a linear combination of the original perturbations. In these transformed variables, the system becomes
 #
-# $$\boxed{\mathbf{w}_t+\boldsymbol{\Lambda}\mathbf{w}_x=\mathbf{0}.}$$
+# $$\boxed{\partial_t \mathbf{w}+\boldsymbol{\Lambda}\partial_x \mathbf{w}=\mathbf{0}.}$$
 #
 # For three equations, this means
 #
 # $$\begin{aligned}
-# (w_1)_t+\lambda_1(w_1)_x&=0,\\
-# (w_2)_t+\lambda_2(w_2)_x&=0,\\
-# (w_3)_t+\lambda_3(w_3)_x&=0.
+# \partial_t w_1+\lambda_1\partial_x w_1&=0,\\
+# \partial_t w_2+\lambda_2\partial_x w_2&=0,\\
+# \partial_t w_3+\lambda_3\partial_x w_3&=0.
 # \end{aligned}$$
 #
 # For real eigenvalues and initial profiles $w_{j,0}(x)$ on an unbounded domain, the solutions are
@@ -835,7 +883,7 @@
 #
 # Nonreal eigenvalues need not be purely imaginary: they may have both nonzero real and imaginary parts. Since $\mathbf{J}_0$ is real, nonreal eigenvalues occur in complex-conjugate pairs. In particular, a real $3\times3$ matrix always has at least one real eigenvalue, so its three eigenvalues cannot all be nonreal.
 #
-# **Parabolic behavior is not identified by repeated eigenvalues alone.** A diagonalizable first-order system with repeated real speeds is still hyperbolic. Diffusive parabolic evolution normally involves second spatial derivatives, for example $\mathbf{q}_t=\mathbf{D}\mathbf{q}_{xx}$ with a positive-definite diffusion matrix. Such equations can be rewritten using auxiliary variables, but then they do not generally take the simple form $\mathbf{q}_t+\mathbf{J}_0\mathbf{q}_x=\mathbf{0}$ with an invertible coefficient of every time derivative. The parabolic principal-part classification encountered in the second-order reduction must therefore not be transferred to an arbitrary conservation system merely by counting repeated roots.
+# **Parabolic behavior is not identified by repeated eigenvalues alone.** A diagonalizable first-order system with repeated real speeds is still hyperbolic. Diffusive parabolic evolution normally involves second spatial derivatives, for example $\partial_t \mathbf{q}=\mathbf{D}\partial_{xx} \mathbf{q}$ with a positive-definite diffusion matrix. Such equations can be rewritten using auxiliary variables, but then they do not generally take the simple form $\partial_t \mathbf{q}+\mathbf{J}_0\partial_x \mathbf{q}=\mathbf{0}$ with an invertible coefficient of every time derivative. The parabolic principal-part classification encountered in the second-order reduction must therefore not be transferred to an arbitrary conservation system merely by counting repeated roots.
 #
 # ##### Example: three distinct propagation speeds
 #
