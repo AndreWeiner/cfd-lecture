@@ -4,6 +4,10 @@ title: Computational Fluid Dynamics
 
 Lecture notes and exercises from the Institute of Fluid Mechanics at TU Dresden.
 
+The course material is based on lecture notes from the course “Numerische Strömungsmechanik,” taught by Dr. Jörg Stiller, and the course “Computational Fluid Dynamics,” formerly taught by Dr. Jordi Ventosa Molina and now taught by Dr. Andre Weiner.
+
+Unless otherwise noted, these course materials are licensed under a [Creative Commons Attribution 4.0 International License (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/).
+
 ## Lectures and exercises
 
 | # | Topic | Lecture | Exercise | Slides |
