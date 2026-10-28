@@ -1,0 +1,18 @@
+{
+  "N": 40,
+  "v": 1.0,
+  "gamma": 0.01,
+  "dt": 0.001,
+  "steps": 3000,
+  "C": 0.04,
+  "D": 0.015999999999999997,
+  "final_max_nodal_error": {
+    "central": 0.029305480000219097,
+    "upwind": 0.2319319665168469
+  },
+  "checks": [
+    "all Fourier modes stable",
+    "discrete mean preserved",
+    "independent Fourier evolution agrees within 1e-12"
+  ]
+}

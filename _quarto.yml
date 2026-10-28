@@ -6,11 +6,15 @@ project:
     - notebooks/lecture_00.qmd
     - notebooks/lecture_01.py
     - notebooks/lecture_02.py
+    - notebooks/lecture_03.py
     - notebooks/exercise_01.py
     - notebooks/exercise_02.py
+    - notebooks/exercise_03.py
   resources:
     - videos/*.mp4
     - notebooks/media/pde-*.mp4
+    - notebooks/media/fd-*.mp4
+    - notebooks/media/fd-*.webm
     - notebooks/media/euler-characteristic-modes-*.mp4
     - notebooks/media/euler-physical-perturbations-*.mp4
     - notebooks/media/euler-dependence-build-*.mp4
@@ -52,6 +56,12 @@ website:
               - href: notebooks/lecture_02.py
                 text: Lecture
               - href: notebooks/exercise_02.py
+                text: Practice
+          - section: Finite difference method foundations
+            contents:
+              - href: notebooks/lecture_03.py
+                text: Lecture
+              - href: notebooks/exercise_03.py
                 text: Practice
 
 format:

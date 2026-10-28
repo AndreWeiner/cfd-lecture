@@ -15,8 +15,11 @@ Unless otherwise noted, these course materials are licensed under a [Creative Co
 | 0 | How to learn with generative AI | [Read](notebooks/lecture_00.qmd) | — | — |
 | 1 | Course overview and first example | [Read](notebooks/lecture_01.py) | [Exercises](notebooks/exercise_01.py) | [Slides](https://andreweiner.github.io/cfd-lecture-slides/course_intro.html) |
 | 2 | Transport phenomena and classification | [Read](https://andreweiner.github.io/cfd-lecture/notebooks/lecture_02.html) | [Exercises](notebooks/exercise_02.py) | [Slides](https://andreweiner.github.io/cfd-lecture-slides/classification.html) |
-| 3 | Finite difference method | | | |
-| 4 | Finite volume method | | | |
-| 5 | Pressure-velocity coupling | | | |
-| 6 | Solving linear systems of equations | | | |
+| 3 | Finite difference method foundations | [Read](notebooks/lecture_03.py) | [Exercises](notebooks/exercise_03.py) | [Slides (planned)](https://andreweiner.github.io/cfd-lecture-slides/finite_difference_foundations.html) |
+| 4 | Consistency, stability, and convergence | | | |
+| 5 | Finite difference methods for conservation laws | | | |
+| 6 | Multidimensional finite difference methods | | | |
+| 7 | Finite volume method | | | |
+| 8 | Pressure-velocity coupling | | | |
+| 9 | Solving linear systems of equations | | | |
 
