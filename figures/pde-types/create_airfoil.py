@@ -75,7 +75,7 @@ def draw():
         ax.annotate('Shock',xy=point(.63,cap[-1]-.025),xytext=(.85,.4),ha='center',arrowprops=style)
         ax.annotate('Attached boundary layer\nParabolic marching model',xy=point(.38,-.075),xytext=(.25,-.47),ha='center',arrowprops=style)
         ax.annotate('Unsteady separation /\nturbulent wake',xy=point(1.12,.03),xytext=(1.49,-.57),ha='center',arrowprops=style)
-        ax.text(1.45,.47,'Acoustic propagation\nHyperbolic wave model',ha='center',color='C0')
+        ax.text(1.45,.47,'Acoustic propagation\nHyperbolic wave model',ha='center',color=foreground)
         for label in ax.texts:
             if label.get_text():
                 label.set_bbox(dict(facecolor=plt.rcParams['axes.facecolor'],edgecolor='none',pad=2,alpha=.95))

@@ -61,7 +61,7 @@
 # 1. Derive the observed-order estimator
 #
 #    $$
-#    p_{\mathrm{obs}}=\frac{\log(E(h)/E(h/2))}{\log2}.
+#    p_{\mathrm{obs}}=\frac{\log(E(h)/E(h/2))}{\log(2)}.
 #    $$
 #
 # 2. Explain why this estimate is unreliable when an error is zero, near floating-point precision, or outside the range where the leading Taylor term dominates.
@@ -128,9 +128,9 @@
 #
 # $$
 # \left(\mathbf I-\frac{\Delta t}{2}\mathbf L\right)
-# \underline\varphi^{n+1}
+# \boldsymbol{\varphi}^{n+1}
 # =\left(\mathbf I+\frac{\Delta t}{2}\mathbf L\right)
-# \underline\varphi^n.
+# \boldsymbol{\varphi}^n.
 # $$
 #
 # For these small systems, `numpy.linalg.solve` is sufficient; do not explicitly form a matrix inverse. Check the linear-system residual. Efficient solvers will be treated later in the course.

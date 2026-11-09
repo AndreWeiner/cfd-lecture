@@ -1,6 +1,7 @@
 """Forward Euler comparison; reproduce with the course Python from any directory."""
 from pathlib import Path
 import sys
+from argparse import ArgumentParser
 import json
 import subprocess
 import numpy as np
@@ -11,7 +12,9 @@ from matplotlib.animation import FuncAnimation, FFMpegWriter
 ROOT=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(ROOT/'notebooks'))
 from figure_style import figure_style, WIDTH_MM
-OUT=ROOT/'notebooks/media'
+parser = ArgumentParser(description=__doc__)
+parser.add_argument("--output-dir", type=Path, default=ROOT / "notebooks/media")
+OUT = parser.parse_args().output_dir
 OUT.mkdir(parents=True,exist_ok=True)
 N=40; V=1.; GAMMA=.01; DT=.001; STEPS=3000; STRIDE=20
 DX=1/N; C=V*DT/DX; D=GAMMA*DT/DX**2
@@ -62,6 +65,8 @@ for mode in ['light','dark']:
             for scheme,line in lines.items():
                 y=profiles[scheme][j];line.set_ydata(np.r_[y,y[0]])
             title.set_text('$t=%.2f$'%t)
+        update(0)
+        fig.canvas.draw()  # Verify TeX labels before encoding the animation.
         animation=FuncAnimation(fig,update,frames=len(times),interval=100)
         animation.save(OUT/f'fd-euler-comparison-{mode}.mp4',writer=FFMpegWriter(fps=10,codec='libx264',extra_args=['-pix_fmt','yuv420p']),dpi=150)
         subprocess.run(['ffmpeg','-v','error','-y','-i',str(OUT/f'fd-euler-comparison-{mode}.mp4'),'-c:v','libvpx-vp9','-b:v','0','-crf','32',str(OUT/f'fd-euler-comparison-{mode}.webm')],check=True)

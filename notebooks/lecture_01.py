@@ -21,7 +21,7 @@
 # :::
 #
 # <figure class="cfd-animation">
-# <video controls loop playsinline preload="metadata" aria-label="Velocity magnitude in the flow past a cylinder at Reynolds number 3900">
+# <video controls loop playsinline preload="metadata" aria-label="Velocity magnitude in the flow past a cylinder at Reynolds number 3900" autoplay muted>
 # <source src="../videos/plane_U_magnitude_preview.mp4" type="video/mp4">
 # Your browser does not support embedded video. <a href="../videos/plane_U_magnitude_preview.mp4">Download the animation</a>.
 # </video>
@@ -128,7 +128,7 @@ save_theme_variants(draw_cfd_venn, figure_directory / "media/cfd-venn.svg")
 # The following animation illustrates unsteady flow effects that can occur on passenger aircraft. Understanding these effects and, where necessary, mitigating them during the design stage is crucial for aircraft safety and reliable operation.
 #
 # <figure class="cfd-animation">
-# <video controls loop playsinline preload="metadata" aria-label="Spectral POD mode showing shock–boundary-layer interactions around the Airbus XRF1 aircraft">
+# <video controls loop playsinline preload="metadata" aria-label="Spectral POD mode showing shock–boundary-layer interactions around the Airbus XRF1 aircraft" autoplay muted>
 # <source src="../videos/xrf1_spod_mode_example.mp4" type="video/mp4">
 # Your browser does not support embedded video. <a href="../videos/xrf1_spod_mode_example.mp4">Download the animation</a>.
 # </video>
@@ -395,7 +395,7 @@ save_theme_variants(channel_module.draw, figure_directory / "media/channel-sketc
 # The remaining momentum equations are
 #
 # $$
-# 0=-\frac{\partial p}{\partial x}+\mu\frac{d^2u}{dy^2},
+# 0=-\frac{\partial p}{\partial x}+\mu\frac{\mathrm{d}^2u}{\mathrm{d}y^2},
 # \qquad
 # \frac{\partial p}{\partial y}=0.
 # $$
@@ -403,7 +403,7 @@ save_theme_variants(channel_module.draw, figure_directory / "media/channel-sketc
 # The pressure therefore depends only on $x$. The streamwise pressure gradient and the second derivative of the velocity profile depend on different coordinates, so each must be constant. With the specified inlet and outlet pressures, the simplified streamwise momentum equation becomes
 #
 # $$
-# \mu\frac{d^2u}{dy^2}=\frac{\Delta p}{L},
+# \mu\frac{\mathrm{d}^2u}{\mathrm{d}y^2}=\frac{\Delta p}{L},
 # \qquad
 # u(0)=0,\qquad u(H)=U_{\mathrm{belt}}.
 # $$
@@ -639,16 +639,16 @@ for discretization_format in ["png", "svg"]:
 #
 # $$
 # g_{i-1/2}\equiv\frac{u_i-u_{i-1}}{\Delta y}
-# \approx\left(\frac{du}{dy}\right)_{i-1/2},
+# \approx\left(\frac{\mathrm{d}u}{\mathrm{d}y}\right)_{i-1/2},
 # \qquad
 # g_{i+1/2}\equiv\frac{u_{i+1}-u_i}{\Delta y}
-# \approx\left(\frac{du}{dy}\right)_{i+1/2}.
+# \approx\left(\frac{\mathrm{d}u}{\mathrm{d}y}\right)_{i+1/2}.
 # $$
 #
 # On our uniform mesh, the distance between the two segment midpoints is again $\Delta y$, since $y_{i+1/2}-y_{i-1/2}=\Delta y$. Dividing the change between the two slope estimates by this distance approximates the second derivative at $y_i$:
 #
 # $$
-# \left(\frac{d^2u}{dy^2}\right)_i
+# \left(\frac{\mathrm{d}^2u}{\mathrm{d}y^2}\right)_i
 # \approx\frac{g_{i+1/2}-g_{i-1/2}}{\Delta y}
 # =\frac{u_{i+1}-2u_i+u_{i-1}}{\Delta y^2}.
 # $$
@@ -656,7 +656,7 @@ for discretization_format in ["png", "svg"]:
 # This construction is motivated by the calculus definition of a derivative:
 #
 # $$
-# \frac{du}{dy}(y)=\lim_{h\to0}\frac{u(y+h)-u(y)}{h}.
+# \frac{\mathrm{d}u}{\mathrm{d}y}(y)=\lim_{h\to0}\frac{u(y+h)-u(y)}{h}.
 # $$
 #
 # A finite-difference approximation retains a finite spacing instead of taking the limit. Applying the same idea to the first derivative gives an approximation of the second derivative. Here we compare slopes on neighboring segments rather than differentiating the piecewise-linear curve twice directly: that curve has zero second derivative inside each segment and a slope jump at the middle node.

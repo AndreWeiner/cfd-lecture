@@ -358,7 +358,7 @@
 # Return to the scientific question from the lecture. The local mass flux is $\rho u(y)$; integrating it across the channel height gives the **mass flow rate per unit belt width**:
 #
 # $$
-# \dot m'=\rho\int_0^H u(y)\,dy.
+# \dot m'=\rho\int_0^H u(y)\,\mathrm{d}y.
 # $$
 #
 # Its units are $\mathrm{kg\,s^{-1}\,m^{-1}}$. For a belt of width $W$, neglecting sidewall effects, the total mass flow rate is $\dot m=W\dot m'$.

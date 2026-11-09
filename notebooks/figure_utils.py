@@ -5,6 +5,8 @@ from typing import Callable, Dict, Optional, Union
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 
+from figure_style import CATEGORICAL_CYCLE
+
 
 def save_theme_variants(
     draw: Callable[[], Figure],
@@ -41,6 +43,7 @@ def save_theme_variants(
             if dark_background is not None:
                 styles.append({"figure.facecolor": dark_background,
                                "axes.facecolor": dark_background})
+        styles.append({"axes.prop_cycle": CATEGORICAL_CYCLE})
         existing = set(plt.get_fignums())
         fig = None
         with plt.style.context(styles):

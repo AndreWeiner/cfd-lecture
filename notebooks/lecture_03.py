@@ -635,25 +635,27 @@
 # We now consider a time-dependent field $\varphi(x,t)$ governed by
 #
 # $$
-# \dot\varphi=\frac{\partial\varphi}{\partial t}=f[\varphi].
+# \dot\varphi=\frac{\partial\varphi}{\partial t}=f(\varphi).
 # $$
 #
 # The right-hand side represents the spatial terms and any sources. For example, constant-velocity convection and constant-coefficient diffusion give
 #
 # $$
-# f[\varphi]=-v\frac{\partial\varphi}{\partial x}
+# f(\varphi)=-v\frac{\partial\varphi}{\partial x}
 # +\Gamma\frac{\partial^2\varphi}{\partial x^2}.
 # $$
 #
-# After spatial discretization, these terms become a function of the nodal solution values. We write the resulting evolution equation schematically as $\dot\varphi=f(\varphi)$; here $\varphi$ may represent the entire discrete solution. The following formulas apply componentwise. Boundary data must also be included consistently. For clarity, we consider an autonomous right-hand side; explicit time dependence can be included as $f(\varphi,t)$.
+# At a given time, the argument of $f$ is the spatial field. The field has one scalar value at each point, and the rate at a point can depend on how the field varies nearby through its spatial derivatives. We keep space continuous while deriving the time-integration formulas.
+#
+# A system is **autonomous** if the right-hand side has no explicit dependence on time. Whenever the system is in the same state, it has the same rate of change, regardless of the time. The state and its rate can both change as the solution evolves. For example, the periodic convection–diffusion system with constant coefficients is autonomous. A prescribed time-varying source can give different rates at the same state, so we then write the right-hand side as $f(t,\varphi)$.
 #
 # Let $t^n$ and $t^{n+1}$ be consecutive time levels, with
 #
 # $$
-# \Delta t=t^{n+1}-t^n>0,\qquad \varphi^n\approx\varphi(t^n).
+# \Delta t=t^{n+1}-t^n>0,\qquad \varphi^n(x)\approx\varphi(x,t^n).
 # $$
 #
-# The lowercase index $n$ counts time steps. A spatial and temporal sample is denoted by $\varphi_i^n\approx\varphi(x_i,t^n)$.
+# The superscript $n$ labels the time level, with $n=0$ at the initial time. We often omit the spatial argument and write $\varphi^n$ for the field at that time level.
 #
 # ### The time step as an average rate of change
 #
@@ -747,9 +749,9 @@
 # \Delta t\,f\left(\frac{\varphi^n+\varphi^{n+1}}{2}\right)}.
 # $$
 #
-# For $f(\varphi,t)$, this evaluation also uses the midpoint time $t^{n+1/2}$. The method is generally implicit and second-order accurate in time. It evaluates the **rate at the average state**, whereas Crank–Nicolson averages the **rates at the endpoint states**. These are generally different for nonlinear $f$, but coincide for an autonomous linear or affine right-hand side.
+# For $f(t,\varphi)$, this evaluation also uses the midpoint time $t^{n+1/2}$. The method is generally implicit and second-order accurate in time. It evaluates the **rate at the average state**, whereas Crank–Nicolson averages the **rates at the endpoint states**. These are generally different for nonlinear $f$, but coincide for an autonomous linear or affine right-hand side.
 #
-# Here **autonomous** means that $f$ has no explicit dependence on time: the rate depends on the current state, although that state changes with time. A scalar **linear** right-hand side has the form $f(\varphi)=a\varphi$, while an **affine** right-hand side has the form $f(\varphi)=a\varphi+b$, with time-independent coefficients $a$ and $b$. For example, $\dot\varphi=-k\varphi$ describes linear decay, and $\dot\varphi=-k\varphi+s$ adds a constant source. For a vector of nodal values, the corresponding affine form is $\underline f(\underline\varphi)=\mathbf A\underline\varphi+\underline b$, with a fixed matrix $\mathbf A$ and vector $\underline b$; the linear case has $\underline b=\underline 0$.
+# A scalar **linear** right-hand side has the form $f(\varphi)=a\varphi$, while an **affine** right-hand side has the form $f(\varphi)=a\varphi+b$, with time-independent coefficients $a$ and $b$. For example, $\dot\varphi=-k\varphi$ describes linear decay, and $\dot\varphi=-k\varphi+s$ adds a constant source. For a vector of nodal values, the corresponding affine form is $\mathbf f(\boldsymbol{\varphi})=\mathbf A\boldsymbol{\varphi}+\mathbf b$, with a fixed matrix $\mathbf A$ and vector $\mathbf b$; the linear case has $\mathbf b=\mathbf 0$.
 #
 # For an affine right-hand side, averaging states before evaluation gives exactly the same result as averaging the evaluated rates:
 #
@@ -769,7 +771,7 @@
 # We can establish the temporal orders using Taylor expansion, just as we did for spatial differences. To simplify the notation, let
 #
 # $$
-# q(t)=f(\varphi(t)),\qquad q_n=q(t^n).
+# q(t)=f(\varphi(t)),\qquad q^n:=q(t^n).
 # $$
 #
 # Here $q$ denotes the right-hand side evaluated **along the exact solution trajectory**. Its time derivatives therefore include the changing solution; for an autonomous scalar problem, for example, $\dot q=f'(\varphi)\dot\varphi$.
@@ -777,41 +779,41 @@
 # Introduce the elapsed time $\tau=t-t^n$, so that $\tau$ runs from $0$ to $\Delta t$ during the step. Taylor expansion about the beginning of the step gives
 #
 # $$
-# q(t^n+\tau)=q_n+\tau\dot q_n
-# +\frac{\tau^2}{2}\ddot q_n+\mathcal O(\tau^3).
+# q(t^n+\tau)=q^n+\tau\dot q^n
+# +\frac{\tau^2}{2}\ddot q^n+\mathcal O(\tau^3).
 # $$
 #
-# The quantities $q_n$, $\dot q_n$, and $\ddot q_n$ are evaluated at the fixed time $t^n$, so they are constants with respect to the integration variable $\tau$. Substituting this expansion into the definition of the interval mean gives
+# The quantities $q^n$, $\dot q^n$, and $\ddot q^n$ are evaluated at the fixed time $t^n$, so they are constants with respect to the integration variable $\tau$. Substituting this expansion into the definition of the interval mean gives
 #
 # $$
 # \begin{aligned}
 # \overline f^{\,n+1/2}
 # &=\frac{1}{\Delta t}\int_0^{\Delta t}q(t^n+\tau)\,\mathrm d\tau\\
 # &=\frac{1}{\Delta t}\left[
-# q_n\tau+\frac{\tau^2}{2}\dot q_n
-# +\frac{\tau^3}{6}\ddot q_n
+# q^n\tau+\frac{\tau^2}{2}\dot q^n
+# +\frac{\tau^3}{6}\ddot q^n
 # \right]_0^{\Delta t}
 # +\mathcal O(\Delta t^3).
 # \end{aligned}
 # $$
 #
-# Integrating each power raises its exponent by one and divides by that new exponent. For example, the quadratic term contributes $\ddot q_n\Delta t^3/6$ to the integral; dividing by $\Delta t$ gives $\ddot q_n\Delta t^2/6$ to the mean. With a bounded third time derivative, integrating the Taylor remainder gives $\mathcal O(\Delta t^4)$, which becomes $\mathcal O(\Delta t^3)$ after division by $\Delta t$. Thus the exact interval mean has the expansion
+# Integrating each power raises its exponent by one and divides by that new exponent. For example, the quadratic term contributes $\ddot q^n\Delta t^3/6$ to the integral; dividing by $\Delta t$ gives $\ddot q^n\Delta t^2/6$ to the mean. With a bounded third time derivative, integrating the Taylor remainder gives $\mathcal O(\Delta t^4)$, which becomes $\mathcal O(\Delta t^3)$ after division by $\Delta t$. Thus the exact interval mean has the expansion
 #
 # $$
 # \overline f^{\,n+1/2}
-# =q_n+\frac{\Delta t}{2}\dot q_n
-# +\frac{\Delta t^2}{6}\ddot q_n+\mathcal O(\Delta t^3).
+# =q^n+\frac{\Delta t}{2}\dot q^n
+# +\frac{\Delta t^2}{6}\ddot q^n+\mathcal O(\Delta t^3).
 # $$
 #
 # We compare each approximation with this mean, inserting exact solution states to isolate the error introduced by the time-integration formula.
 #
 # #### Forward Euler
 #
-# Forward Euler uses $q_n$, so its mean-rate error is
+# Forward Euler uses $q^n$, so its mean-rate error is
 #
 # $$
-# q_n-\overline f^{\,n+1/2}
-# =-\frac{\Delta t}{2}\dot q_n+\mathcal O(\Delta t^2).
+# q^n-\overline f^{\,n+1/2}
+# =-\frac{\Delta t}{2}\dot q^n+\mathcal O(\Delta t^2).
 # $$
 #
 # The leading error is proportional to $\Delta t$: forward Euler is said to be **first-order accurate in time**.
@@ -821,15 +823,15 @@
 # Taylor expansion of the endpoint rate gives
 #
 # $$
-# q(t^{n+1})=q_n+\Delta t\,\dot q_n
-# +\frac{\Delta t^2}{2}\ddot q_n+\mathcal O(\Delta t^3).
+# q(t^{n+1})=q^n+\Delta t\,\dot q^n
+# +\frac{\Delta t^2}{2}\ddot q^n+\mathcal O(\Delta t^3).
 # $$
 #
 # Subtracting the exact mean yields
 #
 # $$
 # q(t^{n+1})-\overline f^{\,n+1/2}
-# =\frac{\Delta t}{2}\dot q_n+\mathcal O(\Delta t^2).
+# =\frac{\Delta t}{2}\dot q^n+\mathcal O(\Delta t^2).
 # $$
 #
 # Backward Euler is also **first-order accurate in time**. Its leading mean-rate error has the opposite sign to that of forward Euler.
@@ -839,16 +841,16 @@
 # Averaging the exact endpoint rates gives
 #
 # $$
-# \frac{q_n+q(t^{n+1})}{2}
-# =q_n+\frac{\Delta t}{2}\dot q_n
-# +\frac{\Delta t^2}{4}\ddot q_n+\mathcal O(\Delta t^3).
+# \frac{q^n+q(t^{n+1})}{2}
+# =q^n+\frac{\Delta t}{2}\dot q^n
+# +\frac{\Delta t^2}{4}\ddot q^n+\mathcal O(\Delta t^3).
 # $$
 #
 # Therefore,
 #
 # $$
-# \frac{q_n+q(t^{n+1})}{2}-\overline f^{\,n+1/2}
-# =\frac{\Delta t^2}{12}\ddot q_n+\mathcal O(\Delta t^3).
+# \frac{q^n+q(t^{n+1})}{2}-\overline f^{\,n+1/2}
+# =\frac{\Delta t^2}{12}\ddot q^n+\mathcal O(\Delta t^3).
 # $$
 #
 # Averaging cancels the first-order mean-rate error. The remaining leading error is proportional to $\Delta t^2$, so Crank–Nicolson is **second-order accurate in time**.
@@ -859,15 +861,15 @@
 #
 # $$
 # q\left(t^n+\frac{\Delta t}{2}\right)
-# =q_n+\frac{\Delta t}{2}\dot q_n
-# +\frac{\Delta t^2}{8}\ddot q_n+\mathcal O(\Delta t^3).
+# =q^n+\frac{\Delta t}{2}\dot q^n
+# +\frac{\Delta t^2}{8}\ddot q^n+\mathcal O(\Delta t^3).
 # $$
 #
 # Hence the midpoint quadrature error in the mean is
 #
 # $$
 # q\left(t^n+\frac{\Delta t}{2}\right)-\overline f^{\,n+1/2}
-# =-\frac{\Delta t^2}{24}\ddot q_n+\mathcal O(\Delta t^3).
+# =-\frac{\Delta t^2}{24}\ddot q^n+\mathcal O(\Delta t^3).
 # $$
 #
 # This is second order, but the implicit midpoint method also approximates the midpoint **state** by the average of the endpoint states. Taylor expansion shows that
@@ -878,7 +880,7 @@
 # =\frac{\Delta t^2}{8}\ddot\varphi(t^n)+\mathcal O(\Delta t^3).
 # $$
 #
-# For smooth $f$, an $\mathcal O(\Delta t^2)$ change in its state argument changes its value by $\mathcal O(\Delta t^2)$. Thus this substitution preserves the **second-order mean-rate accuracy** of implicit midpoint, although it generally changes the leading error coefficient. The coefficient $-\ddot q_n/24$ above belongs to quadrature using the exact midpoint state, rather than to the complete implicit midpoint formula.
+# For smooth $f$, an $\mathcal O(\Delta t^2)$ change in its state argument changes its value by $\mathcal O(\Delta t^2)$. Thus this substitution preserves the **second-order mean-rate accuracy** of implicit midpoint, although it generally changes the leading error coefficient. The coefficient $-\ddot q^n/24$ above belongs to quadrature using the exact midpoint state, rather than to the complete implicit midpoint formula.
 #
 # #### Mean-rate error, one-step error, and global error
 #
@@ -941,15 +943,15 @@
 #
 # $$
 # \frac32 q(t^n)-\frac12 q(t^{n-1})
-# =q_n+\frac{\Delta t}{2}\dot q_n
-# -\frac{\Delta t^2}{4}\ddot q_n+\mathcal O(\Delta t^3).
+# =q^n+\frac{\Delta t}{2}\dot q^n
+# -\frac{\Delta t^2}{4}\ddot q^n+\mathcal O(\Delta t^3).
 # $$
 #
 # Comparing with the exact interval mean yields
 #
 # $$
 # \frac32 q(t^n)-\frac12 q(t^{n-1})-\overline f^{\,n+1/2}
-# =-\frac{5\Delta t^2}{12}\ddot q_n+\mathcal O(\Delta t^3).
+# =-\frac{5\Delta t^2}{12}\ddot q^n+\mathcal O(\Delta t^3).
 # $$
 #
 # The mean-rate error is second order, giving a one-step solution error of $\mathcal O(\Delta t^3)$ and, under suitable stability and starting-value assumptions, a global error of $\mathcal O(\Delta t^2)$. After initialization, the previous rate can be stored and reused, so only one new evaluation of $f$ is needed per step. Explicit stability restrictions still limit the allowable time step.
@@ -1051,7 +1053,7 @@
 # \boxed{\varphi(x,t)=e^{-4\pi^2\Gamma t}\sin\bigl(2\pi(x-vt)\bigr)}.
 # $$
 #
-# Convection transports the wave to the right at speed $v$, while diffusion decreases its amplitude exponentially. The exact solution provides a reference for assessing spatial and temporal errors separately.
+# Convection transports the wave to the right at speed $v$, while diffusion decreases its amplitude exponentially. The exact solution provides a reference for the combined spatial and temporal error in the fully discrete solution. To isolate the temporal error, we can compare with an accurate solution of the semi-discrete system on the same mesh.
 #
 # ### Uniform periodic mesh
 #
@@ -1174,10 +1176,10 @@
 #
 # ### Vector–matrix form
 #
-# Next, we collect the time-dependent nodal values in the solution vector
+# After spatial discretization, the state consists of nodal values rather than a continuous field. We collect these values in the bold solution vector
 #
 # $$
-# \underline{\varphi}(t)=
+# \boldsymbol{\varphi}(t)=
 # \begin{bmatrix}
 # \varphi_0(t)\\\varphi_1(t)\\\vdots\\\varphi_{N-1}(t)
 # \end{bmatrix}
@@ -1187,15 +1189,15 @@
 # The entire semi-discrete problem becomes
 #
 # $$
-# \boxed{\frac{\mathrm d\underline{\varphi}}{\mathrm dt}
-# =\mathbf L\underline{\varphi},\qquad
-# \underline{\varphi}(0)=\begin{bmatrix}\sin(2\pi x_0)\\\vdots\\\sin(2\pi x_{N-1})\end{bmatrix}.}
+# \boxed{\frac{\mathrm d\boldsymbol{\varphi}}{\mathrm dt}
+# =\mathbf L\boldsymbol{\varphi},\qquad
+# \boldsymbol{\varphi}(0)=\begin{bmatrix}\sin(2\pi x_0)\\\vdots\\\sin(2\pi x_{N-1})\end{bmatrix}.}
 # $$
 #
 # The matrix $\mathbf L$ is defined by
 #
 # $$
-# (\mathbf L\underline{\varphi})_i
+# (\mathbf L\boldsymbol{\varphi})_i
 # =c_-\varphi_{(i-1)\bmod N}
 # +c_0\varphi_i
 # +c_+\varphi_{(i+1)\bmod N}.
@@ -1218,7 +1220,7 @@
 #
 # The corner entries implement the periodic connection between the first and last stored nodes. Both coefficient choices satisfy $c_-+c_0+c_+=0$, so constant fields have zero time derivative. On this uniform periodic grid, the column sums also vanish, preserving the discrete spatial mean in the semi-discrete equations.
 #
-# We have now reached the autonomous linear evolution form introduced in the time-integration section, with $\underline f(\underline\varphi)=\mathbf L\underline\varphi$. Any of the time-integration schemes discussed above can be applied to this system, subject to its stability and accuracy requirements.
+# We have now reached the autonomous linear evolution form introduced in the time-integration section, with $\mathbf f(\boldsymbol{\varphi})=\mathbf L\boldsymbol{\varphi}$. Any of the time-integration schemes discussed above can be applied to this system, subject to its stability and accuracy requirements.
 
 # %% [markdown]
 # ### From the semi-discrete system to a fully discrete scheme
@@ -1226,22 +1228,22 @@
 # We now apply time integration to the semi-discrete system
 #
 # $$
-# \frac{\mathrm d\underline\varphi}{\mathrm dt}
-# =\mathbf L\underline\varphi.
+# \frac{\mathrm d\boldsymbol{\varphi}}{\mathrm dt}
+# =\mathbf L\boldsymbol{\varphi}.
 # $$
 #
-# The vector $\underline\varphi^n$ approximates the nodal solution at time $t^n$. The constant matrix $\mathbf L$ contains either the central or the upwind convection coefficients, together with central diffusion and periodic index wrapping. Discretizing time as well as space gives a **fully discrete scheme**.
+# The vector $\boldsymbol{\varphi}^n$ approximates the nodal solution at time $t^n$. The constant matrix $\mathbf L$ contains either the central or the upwind convection coefficients, together with central diffusion and periodic index wrapping. Discretizing time as well as space gives a **fully discrete scheme**.
 #
 # #### Forward Euler
 #
 # Evaluating the right-hand side at the known time level gives
 #
 # $$
-# \frac{\underline\varphi^{n+1}-\underline\varphi^n}{\Delta t}
-# =\mathbf L\underline\varphi^n,
+# \frac{\boldsymbol{\varphi}^{n+1}-\boldsymbol{\varphi}^n}{\Delta t}
+# =\mathbf L\boldsymbol{\varphi}^n,
 # \qquad
-# \boxed{\underline\varphi^{n+1}
-# =(\mathbf I+\Delta t\,\mathbf L)\underline\varphi^n}.
+# \boxed{\boldsymbol{\varphi}^{n+1}
+# =(\mathbf I+\Delta t\,\mathbf L)\boldsymbol{\varphi}^n}.
 # $$
 #
 # Here $\mathbf I$ is the $N\times N$ identity matrix. This update is explicit: the new solution is computed directly from the old solution.
@@ -1251,11 +1253,11 @@
 # Evaluating the right-hand side at the new time level gives
 #
 # $$
-# \frac{\underline\varphi^{n+1}-\underline\varphi^n}{\Delta t}
-# =\mathbf L\underline\varphi^{n+1},
+# \frac{\boldsymbol{\varphi}^{n+1}-\boldsymbol{\varphi}^n}{\Delta t}
+# =\mathbf L\boldsymbol{\varphi}^{n+1},
 # \qquad
-# \boxed{(\mathbf I-\Delta t\,\mathbf L)\underline\varphi^{n+1}
-# =\underline\varphi^n}.
+# \boxed{(\mathbf I-\Delta t\,\mathbf L)\boldsymbol{\varphi}^{n+1}
+# =\boldsymbol{\varphi}^n}.
 # $$
 #
 # The new solution is obtained by solving a linear system at each step.
@@ -1265,18 +1267,18 @@
 # Averaging the right-hand sides at the two time levels gives
 #
 # $$
-# \frac{\underline\varphi^{n+1}-\underline\varphi^n}{\Delta t}
-# =\frac12\mathbf L\underline\varphi^n
-# +\frac12\mathbf L\underline\varphi^{n+1},
+# \frac{\boldsymbol{\varphi}^{n+1}-\boldsymbol{\varphi}^n}{\Delta t}
+# =\frac12\mathbf L\boldsymbol{\varphi}^n
+# +\frac12\mathbf L\boldsymbol{\varphi}^{n+1},
 # $$
 #
 # or, after collecting the unknown new values on the left,
 #
 # $$
 # \boxed{\left(\mathbf I-\frac{\Delta t}{2}\mathbf L\right)
-# \underline\varphi^{n+1}
+# \boldsymbol{\varphi}^{n+1}
 # =\left(\mathbf I+\frac{\Delta t}{2}\mathbf L\right)
-# \underline\varphi^n}.
+# \boldsymbol{\varphi}^n}.
 # $$
 #
 # This method also requires a linear-system solve, but has second-order temporal accuracy rather than the first-order accuracy of the Euler methods.
@@ -1286,18 +1288,18 @@
 # All three updates can be expressed by weighting the old and new right-hand sides with a parameter $\alpha$:
 #
 # $$
-# \frac{\underline\varphi^{n+1}-\underline\varphi^n}{\Delta t}
-# =(1-\alpha)\mathbf L\underline\varphi^n
-# +\alpha\mathbf L\underline\varphi^{n+1}.
+# \frac{\boldsymbol{\varphi}^{n+1}-\boldsymbol{\varphi}^n}{\Delta t}
+# =(1-\alpha)\mathbf L\boldsymbol{\varphi}^n
+# +\alpha\mathbf L\boldsymbol{\varphi}^{n+1}.
 # $$
 #
 # Rearranging gives the common matrix equation
 #
 # $$
 # \boxed{
-# (\mathbf I-\alpha\Delta t\,\mathbf L)\underline\varphi^{n+1}
+# (\mathbf I-\alpha\Delta t\,\mathbf L)\boldsymbol{\varphi}^{n+1}
 # =\left[\mathbf I+(1-\alpha)\Delta t\,\mathbf L\right]
-# \underline\varphi^n.
+# \boldsymbol{\varphi}^n.
 # }
 # $$
 #
@@ -1322,8 +1324,8 @@
 # The weighted time step then becomes
 #
 # $$
-# \boxed{(\mathbf I-\alpha\mathbf M)\underline\varphi^{n+1}
-# =[\mathbf I+(1-\alpha)\mathbf M]\underline\varphi^n}.
+# \boxed{(\mathbf I-\alpha\mathbf M)\boldsymbol{\varphi}^{n+1}
+# =[\mathbf I+(1-\alpha)\mathbf M]\boldsymbol{\varphi}^n}.
 # $$
 #
 # Multiplication by $\Delta t$ turns the spatial coefficients into dimensionless combinations. We define the **diffusion number** $D$ (also called the Fourier number) and the **Courant number** $C$ by
@@ -1365,7 +1367,7 @@
 # For either choice, the matrix action is
 #
 # $$
-# (\mathbf M\underline\varphi)_i
+# (\mathbf M\boldsymbol{\varphi})_i
 # =m_-\varphi_{(i-1)\bmod N}+m_0\varphi_i
 # +m_+\varphi_{(i+1)\bmod N}.
 # $$

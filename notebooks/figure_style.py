@@ -1,4 +1,8 @@
 """Shared figure settings for the course's theory notebooks."""
+from matplotlib import rcParamsDefault
+
+
+CATEGORICAL_CYCLE = rcParamsDefault["axes.prop_cycle"]
 WIDTH_MM = {"single": 89.0, "double": 180.0}
 DPI = 300
 USE_TEX = True  # Explicit opt-out only, e.g. when running without a TeX installation.
@@ -7,6 +11,7 @@ USE_TEX = True  # Explicit opt-out only, e.g. when running without a TeX install
 def figure_style(*, use_tex=USE_TEX):
     return {
         "text.usetex": use_tex,
+        "axes.prop_cycle": CATEGORICAL_CYCLE,
         "font.family": "serif",
         "font.size": 11,
         "axes.labelsize": 11,

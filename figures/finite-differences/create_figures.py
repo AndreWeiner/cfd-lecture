@@ -155,10 +155,10 @@ def time_integration():
         rate = lambda q: .7+.3*q+q*q
         mean = .7+.15+1/3
         ink = plt.rcParams['text.color']
-        panels = [('Forward Euler', [0], r'$\overline f\approx f^n$'),
-                  ('Backward Euler', [1], r'$\overline f\approx f^{n+1}$'),
-                  ('Crank--Nicolson', [0, 1], r'$\overline f\approx(f^n+f^{n+1})/2$'),
-                  ('Midpoint rule', [.5], r'$\overline f\approx f(t^{n+1/2})$')]
+        panels = [('Forward Euler', [0], r'$\overline f^{\,n+1/2}\approx f^n$'),
+                  ('Backward Euler', [1], r'$\overline f^{\,n+1/2}\approx f^{n+1}$'),
+                  ('Crank--Nicolson', [0, 1], r'$\overline f^{\,n+1/2}\approx(f^n+f^{n+1})/2$'),
+                  ('Midpoint rule', [.5], r'$\overline f^{\,n+1/2}\approx f(\varphi(t^{n+1/2}))$')]
         for ax, (name, samples, formula) in zip(axes.flat, panels):
             approximation = np.interp(t, [0, 1], [rate(0), rate(1)]) if len(samples)==2 else np.full_like(t, rate(samples[0]))
             ax.fill_between(t, 0, approximation, color='C1', alpha=.18)
@@ -262,7 +262,7 @@ if __name__ == '__main__':
         save_theme_variants(mesh, OUT/f'fd-mesh.{ext}', dpi=300)
         save_theme_variants(first_derivatives, OUT/f'fd-first-derivatives.{ext}', dpi=300)
         save_theme_variants(mapping_meshes, OUT/f'fd-mapping.{ext}', dpi=300)
-        save_theme_variants(time_integration, OUT/f'fd-time-integration.{ext}', dpi=300)
+        save_theme_variants(time_integration, OUT/f'fd-time-integration.{ext}', dpi=300, transparent=False)
         save_theme_variants(multistep_methods, OUT/f'fd-multistep.{ext}', dpi=300)
         save_theme_variants(convection_diffusion_problem, OUT/f'fd-convection-diffusion.{ext}', dpi=300)
     for mode in ['light', 'dark']:
