@@ -7,6 +7,8 @@
 #
 
 # %% [markdown]
+# [Lecture 4 slides](https://andreweiner.github.io/cfd-lecture-slides/consistency_stability_convergence.html)
+#
 # ## From the PDE to the numerical solution
 #
 # In the [periodic convection–diffusion example from Lecture 3](lecture_03.py#example-forward-euler-with-central-and-upwind-convection), both forward Euler schemes ran stably at $C=0.04$ and $D=0.016$, but upwind convection damped the wave more. When will perturbations grow, and how accurately does a stable scheme transport a wave? We will use the same model problem to answer both questions.
