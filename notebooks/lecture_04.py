@@ -83,6 +83,15 @@
 # $$
 #
 # along the refinement family under consideration. The initial and boundary discretizations must also approximate their prescribed data consistently.
+#
+# The **consistency orders** describe how fast the residual vanishes. For smooth solutions, a bound
+#
+# $$
+# \max_{t^{n+1}\le T}\|\tau_h^n\|_{2,h}
+# \le K\bigl(\Delta t^p+\Delta x^q\bigr)
+# $$
+#
+# with $K$ independent of the discretization gives consistency of at least order $p$ in time and $q$ in space. These orders use the derivative-scaled residual defined above. For example, $\mathcal O(\Delta t+\Delta x^2)$ gives first order in time and second order in space.
 # :::
 #
 # We can check the residual directly by expanding the exact samples in Taylor series.
@@ -91,7 +100,9 @@
 # %% [markdown]
 # ## Consistency of forward Euler with central differences
 #
-# We Taylor-expand the exact samples about $(x_i,t^n)$. With all derivatives evaluated at this point, the three stencil errors are
+# All three Taylor expansions use the same base point $(x_i,t^n)$. In the first line, we expand $\varphi(x_i,t)$ about $t^n$ with $x_i$ held fixed. In the next two lines, we expand $\varphi(x,t^n)$ about $x_i$ with $t^n$ held fixed. Every derivative in these formulas is evaluated at $(x_i,t^n)$.
+#
+# The three stencil errors are
 #
 # $$
 # \begin{aligned}
@@ -104,7 +115,7 @@
 # \end{aligned}
 # $$
 #
-# Substituting into the forward Euler central operator $L_h$ and using $L(\varphi)=0$, we obtain
+# Substituting into the forward Euler central operator $L_h$ and using $L(\varphi)=0$ at $(x_i,t^n)$, we obtain
 #
 # $$
 # \tau_i^n
@@ -151,11 +162,11 @@
 # +\mathcal O(\Delta x^3).
 # $$
 #
-# At $C=1$ the third-derivative contribution cancels. The term $\tfrac{v\Delta x}{2}\partial_x^2\varphi$ remains. Its coefficient is proportional to $\Delta x$, so the residual is still generally first order in $\Delta x$ along this fixed-$C$ refinement path. Here $\Delta t=\Delta x/v$, so the surviving term is also first order in $\Delta t$ along the same path. For upwind convection, the same Courant number has a stronger effect.
+# At $C=1$ the third-derivative contribution cancels. The term $\tfrac{v\Delta x}{2}\partial_{xx}\varphi$ remains. Its coefficient is proportional to $\Delta x$, so the residual is still generally first order in $\Delta x$ along this fixed-$C$ refinement path. Here $\Delta t=\Delta x/v$, so the surviving term is also first order in $\Delta t$ along the same path. For upwind convection, the same Courant number has a stronger effect.
 #
 # ### Forward Euler with upwind convection
 #
-# For $v>0$, the upstream node is $i-1$. We replace only the convection difference by $(w_i^n-w_{i-1}^n)/\Delta x$. Its error on the exact solution is $-\frac{\Delta x}{2}\partial_x^2\varphi+\frac{\Delta x^2}{6}\partial_x^3\varphi+\mathcal O(\Delta x^3)$. The time and diffusion expansions carry over, so the residual is generally $\mathcal O(\Delta t+\Delta x)$ for convection–diffusion. For pure convection and fixed $C$, it becomes
+# For $v>0$, the upstream node is $i-1$. We replace only the convection difference by $(w_i^n-w_{i-1}^n)/\Delta x$. Its error on the exact solution is $-\frac{\Delta x}{2}\partial_{xx}\varphi+\frac{\Delta x^2}{6}\partial_{xxx}\varphi+\mathcal O(\Delta x^3)$. The time and diffusion expansions carry over, so the residual is generally $\mathcal O(\Delta t+\Delta x)$ for convection–diffusion. For pure convection and fixed $C$, it becomes
 #
 # $$
 # \tau_{\mathrm{upwind}}
@@ -169,9 +180,9 @@
 # %% [markdown]
 # ## From Taylor expansion to Lax–Wendroff
 #
-# The consistency analysis gives us a way to improve forward Euler with central convection. Forward Euler keeps only the term linear in $\Delta t$ in the Taylor expansion of the next value. The first term it leaves out is $\tfrac12\Delta t^2\partial_t^2\varphi$. Dividing by $\Delta t$ to form the residual gives the first-order time term we found above.
+# The consistency analysis gives us a way to improve forward Euler with central convection. Forward Euler keeps only the term linear in $\Delta t$ in the Taylor expansion of the next value. The first term it leaves out is $\tfrac12\Delta t^2\partial_{tt}\varphi$. Dividing by $\Delta t$ to form the residual gives the first-order time term we found above.
 #
-# How can we include that missing term using only values we already have at $t^n$? For pure convection, the PDE relates the first time derivative to the spatial slope and the second time derivative to the spatial curvature, $\partial_t^2\varphi=v^2\partial_x^2\varphi$. So we can correct the forward Euler prediction by estimating the curvature at the current time. Keeping the quadratic term in the Taylor expansion gives
+# How can we include that missing term using only values we already have at $t^n$? For pure convection, the PDE relates the first time derivative to the spatial slope and the second time derivative to the spatial curvature, $\partial_{tt}\varphi=v^2\partial_{xx}\varphi$. So we can correct the forward Euler prediction by estimating the curvature at the current time. Keeping the quadratic term in the Taylor expansion gives
 #
 # $$
 # \varphi(x_i,t^{n+1})=\varphi(x_i,t^n)
@@ -188,7 +199,40 @@
 # +\frac{C^2}{2}(\varphi_{i+1}^n-2\varphi_i^n+\varphi_{i-1}^n).
 # $$
 #
-# The last term represents the second-order time contribution using neighboring values at the current time. Including it makes the derivative-scaled residual second order for smooth solutions under fixed-$C$ refinement. At $C=1$, the update again reduces to a shift by one node. The Taylor expansion gives the local residual. We now turn to what happens to perturbations over many time steps.
+# The last term represents the second-order time contribution using neighboring values at the current time. Including it makes the derivative-scaled residual second order for smooth solutions under fixed-$C$ refinement. At $C=1$, the update again reduces to a shift by one node.
+#
+# ### The modified equation for Lax–Wendroff
+#
+# We can interpret the remaining error by asking which continuous equation a smooth field $\varphi_M$ must satisfy so that its samples follow the numerical update to the order retained. This is the **modified equation**. Expanding the stencil and dividing by $\Delta t$ gives
+#
+# $$
+# \begin{aligned}
+# \frac{\partial\varphi_M}{\partial t}
+# +v\frac{\partial\varphi_M}{\partial x}
+# ={}&-\frac{\Delta t}{2}\left(
+# \frac{\partial^2\varphi_M}{\partial t^2}
+# -v^2\frac{\partial^2\varphi_M}{\partial x^2}\right)\\
+# &-\frac{\Delta t^2}{6}\frac{\partial^3\varphi_M}{\partial t^3}
+# -\frac{v\Delta x^2}{6}\frac{\partial^3\varphi_M}{\partial x^3}
+# +\mathcal O(\Delta x^3).
+# \end{aligned}
+# $$
+#
+# Here and below, the remainder refers to refinement at fixed $C$ for smooth fields with bounded derivatives. At leading order, the convection equation gives $\partial_{tt}\varphi_M=v^2\partial_{xx}\varphi_M$ and $\partial_{ttt}\varphi_M=-v^3\partial_{xxx}\varphi_M$. The difference in parentheses therefore contributes only at the next order. Collecting the remaining third derivatives yields
+#
+# $$
+# \boxed{
+# \frac{\partial\varphi_M}{\partial t}
+# +v\frac{\partial\varphi_M}{\partial x}
+# =-\frac{v\Delta x^2}{6}(1-C^2)
+# \frac{\partial^3\varphi_M}{\partial x^3}
+# +\mathcal O(\Delta x^3).
+# }
+# $$
+#
+# Thus Lax–Wendroff cancels the leading second-derivative correction of forward Euler with central convection. The leading remaining correction is a third spatial derivative. It changes how waves of different wavelengths travel and can deform a profile through **numerical dispersion**. We will examine this effect with Fourier modes later in the lecture. For $C=1$ this correction vanishes, consistent with the exact one-node shift. The modified equation is an asymptotic description of smooth, resolved profiles; the discrete update determines the behavior of all grid modes.
+#
+# We now turn to what happens to perturbations over many time steps.
 
 # %% [markdown]
 # ## From the Courant condition to stability
@@ -207,19 +251,37 @@
 # <video class="light-content" controls loop playsinline preload="metadata" width="100%" aria-label="Upwind comparison at Courant numbers 0.8 and 1.2"><source src="media/csc-upwind-light.mp4" type="video/mp4"></video>
 # <video class="dark-content" controls loop playsinline preload="metadata" width="100%" aria-label="Upwind comparison at Courant numbers 0.8 and 1.2"><source src="media/csc-upwind-dark.mp4" type="video/mp4"></video>
 #
-# For a perturbation $z_i^n$, the linear upwind update is
+# We compare two numerical solutions of the same upwind scheme. The first, $\varphi_i^n$, starts from the smooth sine wave. The second, $\widetilde{\varphi}_i^n$, starts from the same wave with a small perturbation. Their difference at time $t^n$ is $z_i^n=\widetilde{\varphi}_i^n-\varphi_i^n$.
+#
+# The forward Euler upwind update for pure convection is
 #
 # $$
-# z_i^{n+1}=(1-C)z_i^n+Cz_{i-1}^n.
+# \varphi_i^{n+1}=(1-C)\varphi_i^n+C\varphi_{i-1}^n.
 # $$
 #
-# On an even periodic grid, suppose $z_i^n=a^n(-1)^i$. The upstream sample has the opposite sign, so
+# The perturbed solution follows the same update with $\widetilde{\varphi}$ in place of $\varphi$. Subtracting the two updates gives
 #
 # $$
-# z_i^{n+1}=(1-2C)a^n(-1)^i.
+# \begin{aligned}
+# z_i^{n+1}
+# &=\widetilde{\varphi}_i^{n+1}-\varphi_i^{n+1}\\
+# &=(1-C)\bigl(\widetilde{\varphi}_i^n-\varphi_i^n\bigr)
+#   +C\bigl(\widetilde{\varphi}_{i-1}^n-\varphi_{i-1}^n\bigr)\\
+# &=(1-C)z_i^n+Cz_{i-1}^n.
+# \end{aligned}
 # $$
 #
-# The factor $1-2C$ is the **gain** of this alternating mode. At $C=0.8$ it is $-0.6$, so the perturbation flips sign and shrinks in each step. At $C=1.2$ it is $-1.4$, so it flips sign and grows. At $C=1$ the profile shifts by one node, and the alternating mode flips sign with unchanged magnitude. For any initial profile, the update is a convex combination when $0\le C\le 1$, so its maximum norm cannot grow.
+# Because the update is linear, the perturbation obeys the same stencil. We can follow its evolution independently of the sine wave.
+#
+# For $0\le C\le1$, the weights $1-C$ and $C$ are nonnegative and sum to one. Each new perturbation value is a weighted average of two old values, so the maximum absolute perturbation cannot increase. When $C>1$, the weight $1-C$ is negative and this bound no longer follows. To see actual growth, we choose neighboring perturbations with opposite signs.
+#
+# On an even periodic grid, the alternating pattern $z_i^n=a^n(-1)^i$ has $z_{i-1}^n=-z_i^n$ at every node. Substituting into the update gives
+#
+# $$
+# z_i^{n+1}=(1-2C)z_i^n=(1-2C)a^n(-1)^i.
+# $$
+#
+# The factor $1-2C$ is the **gain** of the alternating mode. For $C>1$ it is less than $-1$, so the pattern flips sign and its magnitude grows by a factor of $2C-1$ every step. At $C=1.2$, for example, neighboring values $z_i^n=1$ and $z_{i-1}^n=-1$ give $(-0.2)(1)+1.2(-1)=-1.4$. The pattern stays alternating, so the same amplification repeats. At $C=0.8$, the gain is $-0.6$ and the pattern shrinks each step. At $C=1$, it flips sign with unchanged magnitude as the profile shifts by one node.
 #
 # ::: {.callout-note title="Stability" icon=false}
 # A linear one-step scheme is stable in a given norm if, for each fixed final time $T$, there is a constant $K_T$ independent of $h$ along the chosen refinement family such that every initial perturbation $z^0$ satisfies
@@ -265,7 +327,7 @@
 #
 # The open marker at $x=L$ repeats the sample at $x=0$. The dashed curves show the continuous cosines from which the filled markers were sampled.
 #
-# Why work with waves? The PDE and the uniform periodic stencils are linear and have constant coefficients. Each wave evolves independently. In the continuous convection–diffusion equation, $\partial_x$ multiplies a mode by $\mathrm{i}\kappa$ and $\partial_x^2$ multiplies it by $-\kappa^2$. Thus its amplitude satisfies
+# Why work with waves? The PDE and the uniform periodic stencils are linear and have constant coefficients. Each wave evolves independently. In the continuous convection–diffusion equation, $\partial_x$ multiplies a mode by $\mathrm{i}\kappa$ and $\partial_{xx}$ multiplies it by $-\kappa^2$. Thus its amplitude satisfies
 #
 # $$
 # \frac{\mathrm d\widehat\varphi}{\mathrm dt}
@@ -274,36 +336,10 @@
 #
 # Convection advances the wave by changing its phase. Diffusion reduces its magnitude, more rapidly at higher wavenumbers. We can compare the discrete evolution against both effects.
 #
-# ### Modified wavenumbers of spatial differences
-#
-# We first keep time continuous. Let $w_j=\exp(\mathrm{i}\kappa x_j)$ and define $\theta=\kappa\Delta x$. At the neighboring nodes, $w_{j\pm1}=\exp(\mathrm{i}\kappa(x_j\pm\Delta x))=\exp(\pm\mathrm{i}\theta)w_j$. For the central first derivative $D^0$ and the backward (upwind for $v>0$) first derivative $D^-$, we define modified wavenumbers by $D^0 w=\mathrm{i}\widetilde\kappa_0 w$ and $D^-w=\mathrm{i}\widetilde\kappa_- w$. Substituting the shifted values gives
-#
-# $$
-# \begin{aligned}
-# \mathrm{i}\widetilde\kappa_0
-#  &=\frac{\exp(\mathrm{i}\theta)-\exp(-\mathrm{i}\theta)}{2\Delta x},
-# &\widetilde\kappa_0&=\frac{\sin(\theta)}{\Delta x},\\
-# \mathrm{i}\widetilde\kappa_-
-#  &=\frac{1-\exp(-\mathrm{i}\theta)}{\Delta x},
-# &\widetilde\kappa_-&=\frac{\sin(\theta)-\mathrm{i}[1-\cos(\theta)]}{\Delta x}.
-# \end{aligned}
-# $$
-#
-# For the compact central second derivative $D^-D^+$, we use $D^-D^+w=-\widetilde\kappa_2^2 w$ with the nonnegative magnitude
-#
-# $$
-# \widetilde\kappa_2=\frac{2|\sin(\theta/2)|}{\Delta x}.
-# $$
-#
-# ![Real modified wavenumbers and the upwind imaginary contribution, normalized by the Nyquist wavenumber.](media/csc-modified-wavenumbers-light.svg){.light-content width=100%}
-# ![Real modified wavenumbers and the upwind imaginary contribution, normalized by the Nyquist wavenumber.](media/csc-modified-wavenumbers-dark.svg){.dark-content width=100%}
-#
-# The plot uses $0\le\kappa/\kappa_{\max}\le1$. For long waves, the real modified wavenumbers approach $\kappa$. For shorter waves, both first derivatives give the same smaller phase speed $v\sin(\theta)/\theta$. The central first derivative vanishes on the alternating mode because its two neighbors agree. Upwind adds a real decay rate $-v[1-\cos(\theta)]/\Delta x$ to the evolution, which damps short waves most strongly. The compact central second derivative continues to damp the alternating mode when $\Gamma>0$, with discrete decay rate $-\Gamma\widetilde\kappa_2^2$ of smaller magnitude than $-\Gamma\kappa^2$ at the same nonzero wavenumber.
-
 # %% [markdown]
 # ## Von Neumann stability analysis
 #
-# We now discretize both space and time. For one Fourier component we write $w_j^n=\widehat w^{\,n}\exp(\mathrm{i}j\theta)$ and substitute it into the update. The **gain function** (or amplification factor) $G(\theta)$ satisfies
+# To analyze a numerical time step, we substitute the Fourier mode directly into the fully discrete update. With $\theta=\kappa\Delta x$, a shift by one node multiplies the mode by $\exp(\pm\mathrm{i}\theta)$. For one Fourier component we write $w_j^n=\widehat w^{\,n}\exp(\mathrm{i}j\theta)$ and substitute it into the update. The **gain function** (or amplification factor) $G(\theta)$ satisfies
 #
 # $$
 # \widehat w^{\,n+1}=G(\theta)\widehat w^{\,n},
@@ -314,7 +350,7 @@
 #
 # For pure upwind convection, the shift by one node gives $G=(1-C)+C\exp(-\mathrm{i}\theta)$. Take $C=1/2$ and $\theta=\pi/2$, a wave with four nodes per wavelength. The gain is $G=(1-\mathrm{i})/2$, so its magnitude is $1/\sqrt{2}$ and its phase is $-\pi/4$. The exact wave moves to the right by half a grid spacing, which also gives a phase change of $-C\theta=-\pi/4$. The numerical step gets the phase right and reduces the amplitude, whereas the exact amplitude stays constant.
 #
-# More generally, let $A_h$ be the spatial right-hand side after discretizing space, as in Lecture 3. If $A_hw=\lambda_h(\theta)w$ on a mode $w$, forward Euler applies $I+\Delta t\,A_h$ and gives $G(\theta)=1+\Delta t\,\lambda_h(\theta)$. The modified wavenumbers tell us how the spatial operator acts. The time update determines how that action becomes a gain.
+# More generally, let $A_h$ be the spatial right-hand side after discretizing space, as in Lecture 3. If $A_hw=\lambda_h(\theta)w$ on a mode $w$, forward Euler applies $I+\Delta t\,A_h$ and gives $G(\theta)=1+\Delta t\,\lambda_h(\theta)$. The multiplier $\lambda_h(\theta)$ follows directly by substituting the neighboring Fourier samples into $A_h$. Forward Euler turns that spatial action into a one-step gain.
 #
 # ### When the Fourier test applies
 #
@@ -373,25 +409,6 @@
 # For $0\le C\le1$, all modes have $|G_{\mathrm{LW}}|\le1$. For $C>1$, every nonconstant mode grows per step. At $C=1$, $G_{\mathrm{LW}}=\exp(-\mathrm{i}\theta)$, so every grid mode advances by exactly the right phase with unchanged magnitude. For $0<C<1$ and small $\theta$, the amplitude factor differs from one by $\mathcal O(\theta^4)$ and the phase error starts at order $\theta^3$. The Courant number affects both errors and also determines how many steps they accumulate over a given travel distance.
 
 # %% [markdown]
-# ## Modified equations
-#
-# The residual measures what the stencil does to the exact PDE solution. We can also ask what continuous equation a smooth interpolating field $\varphi_M$ must satisfy so that its samples approximately follow the numerical scheme. We Taylor-expand $L_h(\pi_h\varphi_M)=0$, use the original PDE to eliminate the time derivatives in the leading corrections, and keep terms to the desired order. This gives a **modified operator** $L_M$ such that $L_M(\varphi_M)=0$ to that order. The corrections enter with the opposite sign when moved to the right-hand side.
-#
-# For the two forward Euler schemes, the leading convection and time corrections to the second derivative give
-#
-# $$
-# \frac{\partial\varphi_M}{\partial t}+v\frac{\partial\varphi_M}{\partial x}
-# =\begin{cases}
-# \displaystyle\left(\Gamma-\frac{v\Delta x}{2}C\right)\frac{\partial^2\varphi_M}{\partial x^2}+\cdots,
-#  &\text{central convection},\\[6pt]
-# \displaystyle\left(\Gamma+\frac{v\Delta x}{2}(1-C)\right)\frac{\partial^2\varphi_M}{\partial x^2}+\cdots,
-#  &\text{upwind convection}.
-# \end{cases}
-# $$
-#
-# The omitted terms include higher-order discretization terms. With physical diffusion present, the temporal correction also contains higher spatial derivatives, obtained by applying the full convection–diffusion operator twice. Central convection with forward Euler contributes negative numerical diffusivity. With physical diffusion present, the total coefficient can still be positive. In the pure-convection case, upwind convection with forward Euler adds diffusion for $0<C<1$, cancels it at $C=1$, and has negative numerical diffusivity for $C>1$. The modified equation describes the leading behavior for smooth, resolved fields. The exact update gives the growth rate of the grid-scale mode.
-
-# %% [markdown]
 # ## Dissipation, amplitude, and phase errors
 #
 # Over one time step, the exact gain of convection–diffusion is
@@ -420,6 +437,52 @@
 # ![Lax–Wendroff results for a sine wave and a rectangular pulse after half a period of travel at three Courant numbers.](media/csc-lax-wendroff-dark.svg){.dark-content width=100%}
 
 # %% [markdown]
+# ## Modified wavenumbers of spatial differences
+#
+# The gain functions combine the spatial stencil and the time integrator. To examine the spatial contribution on its own, we now keep time continuous. Let $w_j=\exp(\mathrm{i}\kappa x_j)$ and define $\theta=\kappa\Delta x$. At the neighboring nodes, $w_{j\pm1}=\exp(\mathrm{i}\kappa(x_j\pm\Delta x))=\exp(\pm\mathrm{i}\theta)w_j$. For the central first derivative $D^0$ and the backward (upwind for $v>0$) first derivative $D^-$, we define modified wavenumbers by $D^0 w=\mathrm{i}\widetilde\kappa_0 w$ and $D^-w=\mathrm{i}\widetilde\kappa_- w$. Substituting the shifted values gives
+#
+# $$
+# \begin{aligned}
+# \mathrm{i}\widetilde\kappa_0
+#  &=\frac{\exp(\mathrm{i}\theta)-\exp(-\mathrm{i}\theta)}{2\Delta x},
+# &\widetilde\kappa_0&=\frac{\sin(\theta)}{\Delta x},\\
+# \mathrm{i}\widetilde\kappa_-
+#  &=\frac{1-\exp(-\mathrm{i}\theta)}{\Delta x},
+# &\widetilde\kappa_-&=\frac{\sin(\theta)-\mathrm{i}[1-\cos(\theta)]}{\Delta x}.
+# \end{aligned}
+# $$
+#
+# For the compact central second derivative $D^-D^+$, we use $D^-D^+w=-\widetilde\kappa_2^2 w$ with the nonnegative magnitude
+#
+# $$
+# \widetilde\kappa_2=\frac{2|\sin(\theta/2)|}{\Delta x}.
+# $$
+#
+# ![Real modified wavenumbers and the upwind imaginary contribution, normalized by the Nyquist wavenumber.](media/csc-modified-wavenumbers-light.svg){.light-content width=100%}
+# ![Real modified wavenumbers and the upwind imaginary contribution, normalized by the Nyquist wavenumber.](media/csc-modified-wavenumbers-dark.svg){.dark-content width=100%}
+#
+# The plot uses $0\le\kappa/\kappa_{\max}\le1$. For long waves, the real modified wavenumbers approach $\kappa$. For shorter waves, both first derivatives give the same smaller phase speed $v\sin(\theta)/\theta$. The central first derivative vanishes on the alternating mode because its two neighbors agree. Upwind adds a real decay rate $-v[1-\cos(\theta)]/\Delta x$ to the evolution, which damps short waves most strongly. The compact central second derivative continues to damp the alternating mode when $\Gamma>0$, with discrete decay rate $-\Gamma\widetilde\kappa_2^2$ of smaller magnitude than $-\Gamma\kappa^2$ at the same nonzero wavenumber.
+
+# %% [markdown]
+# ## Modified equations
+#
+# The gain functions and modified wavenumbers describe how the scheme changes individual waves. As in the [Lax–Wendroff derivation](#the-modified-equation-for-laxwendroff), we can also interpret these changes through additional terms in a continuous PDE. The residual measures what the stencil does to the exact PDE solution. We can then ask what continuous equation a smooth interpolating field $\varphi_M$ must satisfy so that its samples approximately follow the numerical scheme. We Taylor-expand $L_h(\pi_h\varphi_M)=0$, use the original PDE to eliminate the time derivatives in the leading corrections, and keep terms to the desired order. This gives a **modified operator** $L_M$ such that $L_M(\varphi_M)=0$ to that order. The corrections enter with the opposite sign when moved to the right-hand side.
+#
+# For the two forward Euler schemes, the leading convection and time corrections to the second derivative give
+#
+# $$
+# \frac{\partial\varphi_M}{\partial t}+v\frac{\partial\varphi_M}{\partial x}
+# =\begin{cases}
+# \displaystyle\left(\Gamma-\frac{v\Delta x}{2}C\right)\frac{\partial^2\varphi_M}{\partial x^2}+\cdots,
+#  &\text{central convection},\\[6pt]
+# \displaystyle\left(\Gamma+\frac{v\Delta x}{2}(1-C)\right)\frac{\partial^2\varphi_M}{\partial x^2}+\cdots,
+#  &\text{upwind convection}.
+# \end{cases}
+# $$
+#
+# The omitted terms include higher-order discretization terms. With physical diffusion present, the temporal correction also contains higher spatial derivatives, obtained by applying the full convection–diffusion operator twice. Central convection with forward Euler contributes negative numerical diffusivity. With physical diffusion present, the total coefficient can still be positive. In the pure-convection case, upwind convection with forward Euler adds diffusion for $0<C<1$, cancels it at $C=1$, and has negative numerical diffusivity for $C>1$. The modified equation describes the leading behavior for smooth, resolved fields. The exact update gives the growth rate of the grid-scale mode.
+
+# %% [markdown]
 # ## Consistency order and convergence order
 #
 # We return to the two errors defined at the start of the lecture. The **consistency error** $\tau_h=L_h(\pi_h\varphi)$ is the residual of exact samples in the discrete equations. The **consistency order** describes how fast it tends to zero for smooth solutions. For example, a bound
@@ -441,9 +504,15 @@
 # $$
 #
 # along the chosen refinement family.
-# :::
 #
-# The convergence order describes how fast $E_h$ decreases along that refinement path.
+# The **convergence orders** describe how fast the global solution error vanishes. For a fixed problem and sufficiently regular solution, a bound
+#
+# $$
+# E_h\le K_T\bigl(\Delta t^p+\Delta x^q\bigr)
+# $$
+#
+# with $K_T$ independent of the discretization gives convergence of at least order $p$ in time and $q$ in space within the allowed refinement family. The initial and boundary errors must satisfy the same bound. If we refine with $\Delta t=k\Delta x^r$ for fixed $k>0$ and $r>0$, this bound becomes $E_h=\mathcal O(\Delta x^{\min(rp,q)})$. The observed rate along that path can be higher if leading error terms cancel for the chosen solution.
+# :::
 #
 # Let $B_h$ be the one-step update matrix. The numerical state satisfies $\varphi_h^{n+1}=B_h\varphi_h^n$. If we start the step with exact samples, the result differs from the next exact sample by the one-step defect. With our residual convention this gives $(\pi_h\varphi)^{n+1}=B_h(\pi_h\varphi)^n+\Delta t\,\tau_h^n$. Subtracting the two equations and applying the recurrence repeatedly gives
 #

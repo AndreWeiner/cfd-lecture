@@ -21,7 +21,7 @@
 #
 # ### Task 1 — Separate space and time consistency
 #
-# We use periodic convection–diffusion on the unit interval with constant $v>0$ and $\Gamma>0$. The grid has $N_x$ distinct nodes $x_j=j\Delta x$, with $\Delta x=1/N_x$ and periodic indexing. We write the PDE as $\partial_t\varphi=A\varphi$ with $A=-v\partial_x+\Gamma\partial_x^2$. The two discrete spatial operators are
+# We use periodic convection–diffusion on the unit interval with constant $v>0$ and $\Gamma>0$. The grid has $N_x$ distinct nodes $x_j=j\Delta x$, with $\Delta x=1/N_x$ and periodic indexing. We write the PDE as $\partial_t\varphi=A\varphi$ with $A=-v\partial_x+\Gamma\partial_{xx}$. The two discrete spatial operators are
 #
 # $$
 # A_h^{\mathrm{up}}=-vD^-+\Gamma D^-D^+,
@@ -29,18 +29,28 @@
 # A_h^{\mathrm{cen}}=-vD^0+\Gamma D^-D^+.
 # $$
 #
-# Here $D^-$ and $D^0$ are the backward and central first differences, and $D^-D^+$ is the compact central second difference. We compare backward Euler with upwind convection, backward Euler with central convection, and Crank–Nicolson with central convection. For exact samples $q_j^n=\varphi(x_j,t^n)$, we denote the derivative-scaled residual by $\tau$ (tau) and write
+# Here $D^-$ and $D^0$ are the backward and central first differences, and $D^-D^+$ is the compact central second difference. We compare backward Euler with upwind convection, backward Euler with central convection, and Crank–Nicolson with central convection. These numerical updates can be written together as
 #
 # $$
-# \tau_j^n=\frac{q_j^{n+1}-q_j^n}{\Delta t}
-#  -(1-\alpha)(A_hq^n)_j-\alpha(A_hq^{n+1})_j,
+# \frac{\varphi_j^{n+1}-\varphi_j^n}{\Delta t}
+# =(1-\alpha)(A_h\varphi^n)_j+\alpha(A_h\varphi^{n+1})_j,
 # \qquad
-# \alpha=
-# \begin{cases}
+# \alpha=\begin{cases}
 # 1 & \text{backward Euler},\\
 # 1/2 & \text{Crank–Nicolson}.
 # \end{cases}
 # $$
+#
+# Backward Euler evaluates the spatial right-hand side at the new time level; Crank–Nicolson averages its values at the old and new levels. Both are implicit because the unknown new values occur on the right-hand side.
+#
+# As in Lecture 4, we evaluate consistency by inserting exact samples into the discrete equation. We write $q_j^n=\varphi(x_j,t^n)$, so $q^n=(\pi_h\varphi)^n$. Moving all terms to the left gives the derivative-scaled consistency residual $\tau$ (tau):
+#
+# $$
+# \tau_j^n=\frac{q_j^{n+1}-q_j^n}{\Delta t}
+#  -(1-\alpha)(A_hq^n)_j-\alpha(A_hq^{n+1})_j.
+# $$
+#
+# We assume a sufficiently smooth exact solution for the Taylor expansions below. Temporal expansions keep $x_j$ fixed, and spatial expansions keep time fixed. We use the Courant number $C=v\Delta t/\Delta x$ when discussing coupled refinement. The residual measures a mismatch in the equation; it is distinct from the numerical solution error $\varphi_h-\pi_h\varphi$.
 #
 # 1. Add and subtract the corresponding weighted values of $\partial_t\varphi$ at the two endpoints of the time step. Write $\tau=\tau_t+\tau_x$, where $\tau_t$ compares the time difference with exact derivatives and $\tau_x$ compares $A\varphi$ with $A_hq$. Use the PDE to justify the split.
 # 2. Derive the leading term of $\tau_t$ for backward Euler by expanding about $t^{n+1}$. Derive it for Crank–Nicolson by expanding about the midpoint $t^{n+1/2}$. Show which terms cancel in the midpoint expansion.
@@ -57,6 +67,8 @@
 # -\frac{C}{2}(\varphi_{j+1}^n-\varphi_{j-1}^n),
 # \qquad C=\frac{v\Delta t}{\Delta x}.
 # $$
+#
+# We use the same Fourier test as in Lecture 4: the linear, constant-coefficient update acts on a uniform periodic grid. A perturbation $w$ satisfies the same update, as follows by subtracting two numerical updates. Here $\theta=\kappa\Delta x$ is the phase change between neighboring nodes, with $\kappa_m=2\pi m/L$ and $L=1$. Thus the represented angles are $\theta_m=2\pi m/N_x$ modulo $2\pi$; we seek a bound valid over the full angle range and independent of mesh refinement.
 #
 # 1. Substitute $w_j^n=\widehat w^{\,n}\exp(\mathrm{i}j\theta)$ and derive the gain $G(\theta)=\widehat w^{\,n+1}/\widehat w^{\,n}$. Use $G\overline G$ to find the range of $C$ for which all Fourier angles satisfy $|G|\le 1$.
 # 2. Rewrite the update as a weighted sum of the two neighboring values. Determine when the weights form a convex combination and use that to bound the maximum norm. Describe the update at $C=1$ for positive velocity.
